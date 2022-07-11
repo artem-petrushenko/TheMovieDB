@@ -1,0 +1,11 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  strong-mode:
+    implicit-casts: false           # Неявные объявления
+    implicit-dynamic: false         # Неявные переменные
+
+linter:
+  rules:
+    - avoid_print # Запрет принтов
+    - always_use_package_imports # Полное название импорта
