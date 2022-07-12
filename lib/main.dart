@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
+import 'package:themoviedb/theme/app_colors.dart';
 import 'package:themoviedb/widgets/auth/auth_widget.dart';
-import 'package:themoviedb/app_colors.dart';
+import 'package:themoviedb/widgets/sign_up_widget/sign_up_widget.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'TMDB',
       debugShowCheckedModeBanner: false,
 
       theme: ThemeData(

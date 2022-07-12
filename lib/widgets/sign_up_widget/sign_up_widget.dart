@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:themoviedb/theme/app_colors.dart';
 
-class AuthWidget extends StatefulWidget {
-  const AuthWidget({Key? key}) : super(key: key);
+class SignUpWidget extends StatefulWidget {
+  const SignUpWidget({Key? key}) : super(key: key);
 
   @override
-  State<AuthWidget> createState() => _AuthWidgetState();
+  State<SignUpWidget> createState() => _SignUpWidgetState();
 }
 
-class _AuthWidgetState extends State<AuthWidget> {
+class _SignUpWidgetState extends State<SignUpWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +23,7 @@ class _AuthWidgetState extends State<AuthWidget> {
           onPressed: () {},
         ),
         title: const Text(
-          'Login',
+          'Sign up',
           style: TextStyle(fontWeight: FontWeight.w700, fontSize: 24),
         ),
       ),
@@ -41,7 +41,6 @@ class _Body extends StatelessWidget {
   Widget build(BuildContext context) {
     const mainTextStyle = TextStyle(
         fontWeight: FontWeight.w700, fontSize: 18, color: AppColors.kTextColor);
-
     return SingleChildScrollView(
       // physics: const BouncingScrollPhysics(),
       child: Padding(
@@ -50,7 +49,7 @@ class _Body extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 30),
-            const Text('Log in with one of following options',
+            const Text('Sign up with one of following options',
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 13,
@@ -72,6 +71,10 @@ class _Body extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 48),
+            const Text('Name', style: mainTextStyle),
+            const SizedBox(height: 10),
+            const TextFormFieldWidget(text: 'Enter your name'),
+            const SizedBox(height: 30),
             const Text('Email', style: mainTextStyle),
             const SizedBox(height: 10),
             const TextFormFieldWidget(text: 'Enter your email'),
@@ -91,7 +94,7 @@ class _Body extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  "Don't have an account?",
+                  'Already have an account?',
                   style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 18,
@@ -103,7 +106,7 @@ class _Body extends StatelessWidget {
                   ),
                   onPressed: () {},
                   child: const Text(
-                    'Sign up',
+                    'Login',
                     style: TextStyle(
                       fontSize: 18,
                       color: AppColors.kTextColor,
@@ -208,8 +211,6 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
       _isObscure = !_isObscure;
     });
   }
-
-
 
   @override
   Widget build(BuildContext context) {

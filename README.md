@@ -1,16 +1,16 @@
-# themoviedb
+# The Movie Database (TMDB)
 
-A new Flutter project.
+The project combines [Movit's](https://www.figma.com/file/1JqMO3S7Zpy8OHUPLurOmo/movie-trailer-app-(Community)) design and [TMDB's](https://www.themoviedb.org) open API.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+The language for writing the project is [Dart](https://dart.dev), and [Flutter](https://flutter.dev) was used to implement the visual component.
+> SDK Version
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+[√] Flutter (Channel stable, 3.0.4, on Microsoft Windows [Version 10.0.22000.778], locale ru-RU)
+[√] Android toolchain - develop for Android devices (Android SDK version 33.0.0)
+[√] Chrome - develop for the web
+[√] Visual Studio - develop for Windows (Visual Studio Community 2022 17.2.4)
+[√] Android Studio (version 2021.2)
+[√] Connected device (4 available)
+[√] HTTP Host Availability`
