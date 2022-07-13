@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:themoviedb/theme/app_colors.dart';
 
@@ -22,25 +24,59 @@ class _SignUpWidgetState extends State<SignUpWidget> {
           ),
           onPressed: () {},
         ),
-        title: const Text(
-          'Sign up',
-          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 24),
-        ),
+        title: Text('Sign up', style: Theme.of(context).textTheme.headline2),
       ),
       body: const _Body(),
     );
   }
 }
 
-class _Body extends StatelessWidget {
+class _Body extends StatefulWidget {
   const _Body({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<_Body> {
+  final _nameTextController = TextEditingController();
+  final _loginTextController = TextEditingController();
+  final _passwordTextController = TextEditingController();
+
+  bool _isObscure = true;
+
+  void _signInGoogle() {
+    Navigator.of(context).pushReplacementNamed('/main');
+  }
+
+  void _signInApple() {
+    Navigator.of(context).pushReplacementNamed('/main');
+  }
+
+  void _login() {
+    Navigator.of(context).pushReplacementNamed('/auth');
+  }
+
+  void _createAccount() {
+    final name = _nameTextController.text;
+    final login = _loginTextController.text;
+    final password = _passwordTextController.text;
+
+    if (login == 'admin' && password == 'admin' && name == 'admin') {
+      Navigator.of(context).pushReplacementNamed('/main');
+    } else {
+      log('Not ok');
+    }
+  }
+
+  void _toggle() {
+    _isObscure = !_isObscure;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    const mainTextStyle = TextStyle(
-        fontWeight: FontWeight.w700, fontSize: 18, color: AppColors.kTextColor);
     return SingleChildScrollView(
       // physics: const BouncingScrollPhysics(),
       child: Padding(
@@ -49,246 +85,112 @@ class _Body extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 30),
-            const Text('Sign up with one of following options',
-                style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 13,
-                    color: AppColors.kSupportTextColor)),
+            Text('Sign up with one of following options',
+                style: Theme.of(context).textTheme.subtitle1),
             const SizedBox(height: 42),
             Row(
-              children: const [
-                Expanded(
-                  child: ButtonLoginAsWidget(
-                    icon: Icons.apple_rounded,
-                  ),
-                ),
-                SizedBox(width: 14),
-                Expanded(
-                  child: ButtonLoginAsWidget(
-                    icon: Icons.facebook_rounded,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 48),
-            const Text('Name', style: mainTextStyle),
-            const SizedBox(height: 10),
-            const TextFormFieldWidget(text: 'Enter your name'),
-            const SizedBox(height: 30),
-            const Text('Email', style: mainTextStyle),
-            const SizedBox(height: 10),
-            const TextFormFieldWidget(text: 'Enter your email'),
-            const SizedBox(height: 22),
-            const Text('Password', style: mainTextStyle),
-            const SizedBox(height: 10),
-            const TextFormFieldWidget(
-              text: 'Enter your password',
-              password: true,
-            ),
-            const SizedBox(height: 53),
-            const ButtonWidget(
-              text: 'Create Account',
-            ),
-            const SizedBox(height: 50),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
-                  'Already have an account?',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 18,
-                      color: AppColors.kSupportTextColor),
-                ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    primary: AppColors.kTextColor,
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: _signInApple,
+                    child: const Center(
+                      child: Icon(Icons.apple_rounded,
+                          size: 24, color: AppColors.kIconColor),
+                    ),
                   ),
-                  onPressed: () {},
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: AppColors.kTextColor,
-                      fontWeight: FontWeight.w700,
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: _signInGoogle,
+                    child: const Center(
+                      child: Icon(Icons.facebook_rounded,
+                          size: 24, color: AppColors.kIconColor),
                     ),
                   ),
                 ),
               ],
             ),
+            const SizedBox(height: 48),
+            Text('Name', style: Theme.of(context).textTheme.headline4),
+            const SizedBox(height: 10),
+            TextFormField(
+                controller: _nameTextController,
+                decoration: InputDecoration(
+                    labelText: 'Enter your name',
+                    labelStyle: Theme.of(context).textTheme.overline),
+                style: Theme.of(context).textTheme.overline),
+            const SizedBox(height: 30),
+            Text('Email', style: Theme.of(context).textTheme.headline4),
+            const SizedBox(height: 10),
+            TextFormField(
+                controller: _loginTextController,
+                decoration: InputDecoration(
+                    labelText: 'Enter your email',
+                    labelStyle: Theme.of(context).textTheme.overline),
+                style: Theme.of(context).textTheme.overline),
+            const SizedBox(height: 22),
+            Text('Password', style: Theme.of(context).textTheme.headline4),
+            const SizedBox(height: 10),
+            TextFormField(
+                controller: _passwordTextController,
+                obscureText: _isObscure == true ? true : false,
+                decoration: InputDecoration(
+                    suffixIcon: IconButton(
+                      splashRadius: 24,
+                      color: AppColors.kIconColor,
+                      icon: Icon(_isObscure == true
+                          ? Icons.visibility_outlined
+                          : Icons.visibility_off_outlined),
+                      onPressed: () {
+                        setState(() {
+                          _toggle();
+                        });
+                      },
+                    ),
+                    labelText: 'Enter your password',
+                    labelStyle: Theme.of(context).textTheme.overline),
+                style: Theme.of(context).textTheme.overline),
+            const SizedBox(height: 53),
+            Container(
+              width: double.infinity,
+              height: 47,
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(11.0)),
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    AppColors.kSecondGradientColor,
+                    AppColors.kFirstGradientColor
+                  ],
+                ),
+              ),
+              child: MaterialButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(11.0)),
+                onPressed: _createAccount,
+                child: Text('Create Account',
+                    style: Theme.of(context).textTheme.headline4),
+              ),
+            ),
+            const SizedBox(height: 50),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Already have an account?',
+                    style: Theme.of(context).textTheme.headline6),
+                TextButton(
+                  style: TextButton.styleFrom(primary: AppColors.kTextColor),
+                  onPressed: _login,
+                  child: Text('Login',
+                      style: Theme.of(context).textTheme.headline4),
+                ),
+              ],
+            ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class ButtonWidget extends StatelessWidget {
-  final String text;
-
-  const ButtonWidget({
-    Key? key,
-    required this.text,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return
-        //   ElevatedButton(
-        //   style: ButtonStyle(
-        //     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-        //         RoundedRectangleBorder(
-        //       borderRadius: BorderRadius.circular(11.0),
-        //     )),
-        //     backgroundColor:
-        //         MaterialStateProperty.all(AppColors.kFirstGradientColor),
-        //     minimumSize: MaterialStateProperty.all(
-        //       const Size(47, 47),
-        //     ),
-        //   ),
-        //   onPressed: () {},
-        //   child: Center(
-        //     child: Text(
-        //       text,
-        //       style: const TextStyle(
-        //           fontWeight: FontWeight.w700,
-        //           color: AppColors.kTextColor,
-        //           fontSize: 18),
-        //     ),
-        //   ),
-        // );
-        Container(
-      width: double.infinity,
-      height: 47,
-      decoration: ShapeDecoration(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(11.0)),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            AppColors.kSecondGradientColor,
-            AppColors.kFirstGradientColor
-          ],
-        ),
-      ),
-      child: MaterialButton(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(11.0)),
-        // materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        child: Text(
-          text,
-          style: const TextStyle(
-              fontWeight: FontWeight.w700,
-              color: AppColors.kTextColor,
-              fontSize: 18),
-        ),
-        onPressed: () {},
-      ),
-    );
-  }
-}
-
-class TextFormFieldWidget extends StatefulWidget {
-  final String text;
-  final bool? password;
-
-  const TextFormFieldWidget({
-    Key? key,
-    required this.text,
-    this.password,
-  }) : super(key: key);
-
-  @override
-  State<TextFormFieldWidget> createState() => _TextFormFieldWidgetState();
-}
-
-class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
-  bool _isObscure = true;
-
-  void _toggle() {
-    setState(() {
-      _isObscure = !_isObscure;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 47,
-      child: TextFormField(
-        obscureText: widget.password == true
-            ? (_isObscure == true ? true : false)
-            : false,
-        obscuringCharacter: "·",
-        cursorColor: AppColors.kIconColor,
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.only(left: 15.0),
-          suffixIcon: widget.password == true
-              ? IconButton(
-                  splashRadius: 24,
-                  color: AppColors.kIconColor,
-                  icon: Icon(_isObscure == true
-                      ? Icons.visibility_outlined
-                      : Icons.visibility_off_outlined),
-                  onPressed: () {
-                    setState(() {
-                      _toggle();
-                    });
-                  },
-                )
-              : null,
-          floatingLabelBehavior: FloatingLabelBehavior.never,
-          fillColor: AppColors.kBackgroundWidgetsColor,
-          filled: true,
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.all(
-              Radius.circular(11.0),
-            ),
-          ),
-          border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(11.0),
-            ),
-            borderSide: BorderSide(
-              color: Colors.transparent,
-              width: 0,
-            ),
-          ),
-          labelText: widget.text,
-          labelStyle: const TextStyle(
-              color: AppColors.kSupportTextColor, fontSize: 16.0),
-        ),
-        style:
-            const TextStyle(fontSize: 16.0, color: AppColors.kSupportTextColor),
-      ),
-    );
-  }
-}
-
-class ButtonLoginAsWidget extends StatelessWidget {
-  final IconData icon;
-
-  const ButtonLoginAsWidget({
-    Key? key,
-    required this.icon,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {},
-      style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(11.0),
-          )),
-          backgroundColor:
-              MaterialStateProperty.all(AppColors.kBackgroundWidgetsColor),
-          minimumSize: MaterialStateProperty.all(const Size(57, 57))),
-      child: Center(
-        child: Icon(icon, size: 24, color: AppColors.kIconColor),
       ),
     );
   }

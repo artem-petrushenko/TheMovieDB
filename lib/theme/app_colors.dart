@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-class AppColors {
+abstract class AppColors {
   static const Color kTextColor = Color(0xFFFFFFFF);
   static const Color kSupportTextColor = Color(0xff9c9c9c);
 
