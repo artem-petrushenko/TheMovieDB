@@ -1,7 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:themoviedb/theme/app_colors.dart';
+import 'package:themoviedb/icons.dart';
 
 class AuthWidget extends StatefulWidget {
   const AuthWidget({Key? key}) : super(key: key);
@@ -18,10 +20,8 @@ class _AuthWidgetState extends State<AuthWidget> {
         titleSpacing: 0.0,
         leading: IconButton(
           splashRadius: 24,
-          icon: const Icon(
-            Icons.arrow_back_rounded,
-            color: AppColors.kTextColor,
-          ),
+          icon: SvgPicture.asset(AppIcons.arrowLeft,
+              width: 14, height: 15, color: AppColors.kTextColor),
           onPressed: () {},
         ),
         title: const Text(
@@ -63,7 +63,6 @@ class _BodyState extends State<_Body> {
 
     if (login == 'admin' && password == 'admin') {
       log('Ok');
-      Navigator.of(context).pushReplacementNamed('/main');
     } else {
       log('Not ok');
     }
@@ -96,9 +95,13 @@ class _BodyState extends State<_Body> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: _signInApple,
-                    child: const Center(
-                      child: Icon(Icons.apple_rounded,
-                          size: 24, color: AppColors.kIconColor),
+                    child: Center(
+                      child: SvgPicture.asset(
+                        AppIcons.apple,
+                        height: 20.0,
+                        width: 20.0,
+                        color: AppColors.kIconColor,
+                      ),
                     ),
                   ),
                 ),
@@ -106,11 +109,12 @@ class _BodyState extends State<_Body> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: _signInGoogle,
-                    child: const Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(Icons.facebook_rounded,
-                            size: 24, color: AppColors.kIconColor),
+                    child: Center(
+                      child: SvgPicture.asset(
+                        AppIcons.google,
+                        height: 20.0,
+                        width: 20.0,
+                        color: AppColors.kIconColor,
                       ),
                     ),
                   ),
@@ -121,32 +125,46 @@ class _BodyState extends State<_Body> {
             Text('Email', style: Theme.of(context).textTheme.headline4),
             const SizedBox(height: 10),
             TextFormField(
+                autocorrect: false,
+                enableSuggestions: false,
+                textCapitalization: TextCapitalization.none,
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
                 controller: _loginTextController,
                 decoration: InputDecoration(
-                    labelText: 'Enter your email',
-                    labelStyle: Theme.of(context).textTheme.overline),
+                    hintText: 'Enter your email',
+                    hintStyle: Theme.of(context).textTheme.overline),
                 style: Theme.of(context).textTheme.overline),
             const SizedBox(height: 22),
             Text('Password', style: Theme.of(context).textTheme.headline4),
             const SizedBox(height: 10),
             TextFormField(
+                autocorrect: false,
+                enableSuggestions: false,
+                textCapitalization: TextCapitalization.none,
+                textInputAction: TextInputAction.next,
                 controller: _passwordTextController,
                 obscureText: _isObscure == true ? true : false,
                 decoration: InputDecoration(
                     suffixIcon: IconButton(
                       splashRadius: 24,
                       color: AppColors.kIconColor,
-                      icon: Icon(_isObscure == true
-                          ? Icons.visibility_outlined
-                          : Icons.visibility_off_outlined),
+                      icon: SvgPicture.asset(
+                          _isObscure == true
+                              ? AppIcons.invisible
+                              : AppIcons.visible,
+                          width: 15,
+                          height: 12,
+                          color: AppColors.kIconColor),
+                      // Icon(),
                       onPressed: () {
                         setState(() {
                           _toggle();
                         });
                       },
                     ),
-                    labelText: 'Enter your password',
-                    labelStyle: Theme.of(context).textTheme.overline),
+                    hintText: 'Enter your password',
+                    hintStyle: Theme.of(context).textTheme.overline),
                 style: Theme.of(context).textTheme.overline),
             const SizedBox(height: 53),
             Container(

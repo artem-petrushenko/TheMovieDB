@@ -117,8 +117,8 @@ class _BodyState extends State<_Body> {
             TextFormField(
                 controller: _nameTextController,
                 decoration: InputDecoration(
-                    labelText: 'Enter your name',
-                    labelStyle: Theme.of(context).textTheme.overline),
+                    hintText: 'Enter your name',
+                    hintStyle: Theme.of(context).textTheme.overline),
                 style: Theme.of(context).textTheme.overline),
             const SizedBox(height: 30),
             Text('Email', style: Theme.of(context).textTheme.headline4),
@@ -126,8 +126,8 @@ class _BodyState extends State<_Body> {
             TextFormField(
                 controller: _loginTextController,
                 decoration: InputDecoration(
-                    labelText: 'Enter your email',
-                    labelStyle: Theme.of(context).textTheme.overline),
+                    hintText: 'Enter your email',
+                    hintStyle: Theme.of(context).textTheme.overline),
                 style: Theme.of(context).textTheme.overline),
             const SizedBox(height: 22),
             Text('Password', style: Theme.of(context).textTheme.headline4),
@@ -148,8 +148,8 @@ class _BodyState extends State<_Body> {
                         });
                       },
                     ),
-                    labelText: 'Enter your password',
-                    labelStyle: Theme.of(context).textTheme.overline),
+                    hintText: 'Enter your password',
+                    hintStyle: Theme.of(context).textTheme.overline),
                 style: Theme.of(context).textTheme.overline),
             const SizedBox(height: 53),
             Container(

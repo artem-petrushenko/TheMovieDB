@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         '/sign_up': (context) => const SignUpWidget(),
         '/main': (context) => const MainScreenWidget(),
       },
-      initialRoute: '/main',
+      initialRoute: '/auth',
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:themoviedb/theme/app_colors.dart';
 
 final ThemeData themeData = ThemeData(
+  // brightness: Brightness.dark,
   fontFamily: 'Roboto',
   backgroundColor: AppColors.kBackgroundColor,
   scaffoldBackgroundColor: AppColors.kBackgroundColor,
@@ -13,19 +14,11 @@ final ThemeData themeData = ThemeData(
   inputDecorationTheme: appInputDecorationTheme,
   elevatedButtonTheme: appElevatedButtonThemeData,
   textButtonTheme: appTextButtonThemeData,
-
   // iconTheme: appIconThemeData,
 );
 const BottomNavigationBarThemeData appBottomNavigationBarTheme =
-    BottomNavigationBarThemeData(
-  backgroundColor: AppColors.kBackgroundWidgetsColor,
-  selectedIconTheme: IconThemeData(color: AppColors.kIconColor),
-  unselectedIconTheme: IconThemeData(color: AppColors.kSupportTextColor),
-  selectedItemColor: AppColors.kIconColor,
-  unselectedItemColor: AppColors.kSupportTextColor,
-  showSelectedLabels: true,
-  showUnselectedLabels: false,
-);
+    BottomNavigationBarThemeData();
+
 const AppBarTheme appBarTheme = AppBarTheme(
   backgroundColor: AppColors.kBackgroundColor,
 );
@@ -38,17 +31,19 @@ const TextButtonThemeData appTextButtonThemeData = TextButtonThemeData();
 
 final ElevatedButtonThemeData appElevatedButtonThemeData =
     ElevatedButtonThemeData(
-        style: ButtonStyle(
-  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-    RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(11.0),
+  style: ButtonStyle(
+    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+      RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(11.0),
+      ),
+    ),
+    backgroundColor:
+        MaterialStateProperty.all(AppColors.kBackgroundWidgetsColor),
+    minimumSize: MaterialStateProperty.all(
+      const Size(57, 57),
     ),
   ),
-  backgroundColor: MaterialStateProperty.all(AppColors.kBackgroundWidgetsColor),
-  minimumSize: MaterialStateProperty.all(
-    const Size(57, 57),
-  ),
-));
+);
 
 const TextSelectionThemeData appTextSelectionThemeData = TextSelectionThemeData(
   cursorColor: AppColors.kIconColor,
@@ -58,7 +53,6 @@ const TextSelectionThemeData appTextSelectionThemeData = TextSelectionThemeData(
 
 const InputDecorationTheme appInputDecorationTheme = InputDecorationTheme(
   contentPadding: EdgeInsets.only(left: 15.0),
-  floatingLabelBehavior: FloatingLabelBehavior.never,
   fillColor: AppColors.kBackgroundWidgetsColor,
   filled: true,
   focusedBorder: OutlineInputBorder(
