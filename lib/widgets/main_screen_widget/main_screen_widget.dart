@@ -3,6 +3,8 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 
 import 'package:themoviedb/theme/app_colors.dart';
 
+import 'package:themoviedb/widgets/movie_list/movie_list_widget.dart';
+
 class MainScreenWidget extends StatefulWidget {
   const MainScreenWidget({Key? key}) : super(key: key);
 
@@ -12,12 +14,6 @@ class MainScreenWidget extends StatefulWidget {
 
 class _MainScreenWidgetState extends State<MainScreenWidget> {
   int _selectedIndex = 0;
-
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text('News'),
-    Text('Movies'),
-    Text('Series'),
-  ];
 
   void _onItemTapped(int index) {
     if (_selectedIndex == index) return;
@@ -29,40 +25,13 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: TextFormField(
-      //       decoration: InputDecoration(
-      //           focusedBorder: const OutlineInputBorder(
-      //             borderSide: BorderSide.none,
-      //             borderRadius: BorderRadius.all(
-      //               Radius.circular(100.0),
-      //             ),
-      //           ),
-      //           border: const OutlineInputBorder(
-      //             borderRadius: BorderRadius.all(
-      //               Radius.circular(100.0),
-      //             ),
-      //             borderSide: BorderSide(
-      //               color: Colors.transparent,
-      //               width: 0,
-      //             ),
-      //           ),
-      //           prefixIcon: const Icon(
-      //             Icons.filter_list_rounded,
-      //             color: AppColors.kTextColor,
-      //           ),
-      //           suffixIcon: IconButton(
-      //             splashRadius: 24,
-      //             color: AppColors.kIconColor,
-      //             icon: const Icon(Icons.mic_rounded),
-      //             onPressed: () {},
-      //           ),
-      //           labelText: 'Search in the App',
-      //           labelStyle: Theme.of(context).textTheme.bodyText2),
-      //       style: Theme.of(context).textTheme.bodyText2),
-      // ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: const [
+          Text('News'),
+          MovieListWidget(),
+          Text('Series'),
+        ],
       ),
       bottomNavigationBar: Container(
         color: Colors.black,

@@ -156,7 +156,6 @@ class _BodyState extends State<_Body> {
                           width: 15,
                           height: 12,
                           color: AppColors.kIconColor),
-                      // Icon(),
                       onPressed: () {
                         setState(() {
                           _toggle();
