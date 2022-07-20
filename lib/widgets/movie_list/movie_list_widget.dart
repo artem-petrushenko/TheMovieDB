@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:themoviedb/theme/app_colors.dart';
 
+
 class Movie {
   final String imageName;
   final String title;
@@ -60,82 +61,16 @@ class _MovieListWidgetState extends State<MovieListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return ListView(
+      physics: const BouncingScrollPhysics(),
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 8),
       children: [
-        ListView(
-          // physics: const BouncingScrollPhysics(),
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          padding: EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top + 56 + 29),
-          children: [
-            SizedBox(
-              width: double.infinity,
-              height: 245,
-                child: ListView.separated(
-                  // physics: const BouncingScrollPhysics(),
-                  keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior.onDrag,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: _filterMovies.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final movie = _filterMovies[index];
-                    return Column(children: [
-                        Ink(
-                          width: 150,
-                          height: 215,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            image: DecorationImage(
-                              image: AssetImage(
-                                movie.imageName,
-                              ),
-                              fit: BoxFit.fitWidth,
-                            ),
-                          ),
-                          child: InkWell(
-                            highlightColor:
-                                AppColors.kIconColor.withOpacity(0.25),
-                            splashColor: AppColors.kIconColor.withOpacity(0.35),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(30)),
-                            onTap: () {},
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          movie.title,
-                          style: Theme.of(context).textTheme.subtitle2,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        )
-                      ]
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const SizedBox(width: 22);
-                  },
-                ),
-            ),
-            Container(
-              color: Colors.red,
-              width: 100,
-              height: 500,
-            ),
-            Container(
-              color: Colors.green,
-              width: 100,
-              height: 500,
-            ),
-          ],
-        ),
         Padding(
-          padding: EdgeInsets.only(
-              left: 12, right: 12, top: MediaQuery.of(context).padding.top + 8),
+          padding: const EdgeInsets.only(left: 12, right: 12, bottom: 29),
           child: TextFormField(
             controller: _searchController,
             decoration: InputDecoration(
-                filled: true,
-                fillColor: AppColors.kBackgroundWidgetsColor,
                 focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide.none,
                   borderRadius: BorderRadius.all(
@@ -165,86 +100,113 @@ class _MovieListWidgetState extends State<MovieListWidget> {
                 hintStyle: Theme.of(context).textTheme.bodyText2),
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.only(
+            left: 20,
+            bottom: 24,
+          ),
+          child: Text(
+            'Most Popular',
+            style: Theme.of(context).textTheme.button,
+          ),
+        ),
+        SizedBox(
+          width: double.infinity,
+          height: 245,
+          child: ListView.separated(
+            // physics: const BouncingScrollPhysics(),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            scrollDirection: Axis.horizontal,
+            itemCount: _filterMovies.length,
+            itemBuilder: (BuildContext context, int index) {
+              final movie = _filterMovies[index];
+              return Column(children: [
+                Ink(
+                  width: 150,
+                  height: 215,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    image: DecorationImage(
+                      image: AssetImage(
+                        movie.imageName,
+                      ),
+                      fit: BoxFit.fitWidth,
+                    ),
+                  ),
+                  child: InkWell(
+                    highlightColor: AppColors.kIconColor.withOpacity(0.25),
+                    splashColor: AppColors.kIconColor.withOpacity(0.35),
+                    borderRadius: const BorderRadius.all(Radius.circular(30)),
+                    onTap: () {
+                    },
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  movie.title,
+                  style: Theme.of(context).textTheme.subtitle2,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                )
+              ]);
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return const SizedBox(width: 22);
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 20, bottom: 24, top: 24),
+          child: Text(
+            'New',
+            style: Theme.of(context).textTheme.button,
+          ),
+        ),
+        SizedBox(
+          width: double.infinity,
+          height: 245,
+          child: ListView.separated(
+            // physics: const BouncingScrollPhysics(),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            scrollDirection: Axis.horizontal,
+            itemCount: _filterMovies.length,
+            itemBuilder: (BuildContext context, int index) {
+              final movie = _filterMovies[index];
+              return Column(children: [
+                Ink(
+                  width: 150,
+                  height: 215,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    image: DecorationImage(
+                      image: AssetImage(
+                        movie.imageName,
+                      ),
+                      fit: BoxFit.fitWidth,
+                    ),
+                  ),
+                  child: InkWell(
+                    highlightColor: AppColors.kIconColor.withOpacity(0.25),
+                    splashColor: AppColors.kIconColor.withOpacity(0.35),
+                    borderRadius: const BorderRadius.all(Radius.circular(30)),
+                    onTap: () {},
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  movie.title,
+                  style: Theme.of(context).textTheme.subtitle2,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                )
+              ]);
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return const SizedBox(width: 22);
+            },
+          ),
+        ),
       ],
     );
-
-    // return Stack(
-    //   children: [
-    //     ListView.separated(
-    //       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-    //       padding: const EdgeInsets.only(top: 70),
-    //       shrinkWrap: true,
-    //       // scrollDirection: Axis.horizontal,
-    //       itemCount: _filterMovies.length,
-    //       itemBuilder: (BuildContext context, int index) {
-    //         final movie = _filterMovies[index];
-    //         return Column(
-    //           children: [
-    //             Ink(
-    //               width: 150,
-    //               height: 215,
-    //               decoration: BoxDecoration(
-    //                 borderRadius: BorderRadius.circular(30),
-    //                 image: DecorationImage(
-    //                     image: AssetImage(movie.imageName), fit: BoxFit.fill),
-    //               ),
-    //               child: InkWell(
-    //                 highlightColor: AppColors.kIconColor.withOpacity(0.25),
-    //                 splashColor: AppColors.kIconColor.withOpacity(0.35),
-    //                 borderRadius: const BorderRadius.all(Radius.circular(30)),
-    //                 onTap: () {},
-    //               ),
-    //             ),
-    //             const SizedBox(height: 12),
-    //             Text(movie.title, style: Theme.of(context).textTheme.subtitle2)
-    //           ],
-    //         );
-    //       },
-    //       separatorBuilder: (BuildContext context, int index) {
-    //         return const SizedBox(width: 22);
-    //       },
-    //     ),
-    //     Padding(
-    //       padding: EdgeInsets.only(
-    //           left: 12,
-    //           right: 12,
-    //           top: MediaQuery.of(context).padding.top + 8,
-    //           bottom: 29),
-    //       child: TextFormField(
-    //         controller: _searchController,
-    //         decoration: InputDecoration(
-    //             filled: true,
-    //             fillColor: AppColors.kBackgroundWidgetsColor.withOpacity(0.9),
-    //             focusedBorder: const OutlineInputBorder(
-    //               borderSide: BorderSide.none,
-    //               borderRadius: BorderRadius.all(
-    //                 Radius.circular(100.0),
-    //               ),
-    //             ),
-    //             border: const OutlineInputBorder(
-    //               borderRadius: BorderRadius.all(
-    //                 Radius.circular(100.0),
-    //               ),
-    //               borderSide: BorderSide(
-    //                 color: Colors.transparent,
-    //                 width: 0,
-    //               ),
-    //             ),
-    //             prefixIcon: const Icon(
-    //               Icons.filter_list_rounded,
-    //               color: AppColors.kTextColor,
-    //             ),
-    //             suffixIcon: IconButton(
-    //               splashRadius: 24,
-    //               color: AppColors.kIconColor,
-    //               icon: const Icon(Icons.mic_rounded),
-    //               onPressed: () {},
-    //             ),
-    //             labelText: 'Search in the App',
-    //             labelStyle: Theme.of(context).textTheme.bodyText2),
-    //       ),
-    //     ),
-    //   ],
-    // );
   }
 }
