@@ -1,7 +1,7 @@
 <svg width="24" height="21" viewBox="0 0 24 21" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g filter="url(#filter0_d_93_442)">
-<circle cx="11" cy="8" r="7" stroke="#A9885B" stroke-width="1.5"/>
-<path d="M16 13L19 16" stroke="#A9885B" stroke-width="1.5" stroke-linecap="round"/>
+<circle cx="11" cy="8" r="7" stroke="#FFFFFF" stroke-width="1.5"/>
+<path d="M16 13L19 16" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
 </g>
 <defs>
 <filter id="filter0_d_93_442" x="-0.75" y="0.25" width="24.5" height="24.5" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
@@ -11,7 +11,6 @@
 <feGaussianBlur stdDeviation="2"/>
 <feComposite in2="hardAlpha" operator="out"/>
 <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
-<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_93_442"/>
 <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_93_442" result="shape"/>
 </filter>
 </defs>

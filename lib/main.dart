@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:themoviedb/theme/app_theme.dart';
 import 'package:themoviedb/widgets/auth/auth_widget.dart';
 import 'package:themoviedb/widgets/main_screen_widget/main_screen_widget.dart';
+import 'package:themoviedb/widgets/movie_details/movie_details_widget.dart';
 import 'package:themoviedb/widgets/sign_up/sign_up_widget.dart';
 import 'package:themoviedb/widgets/welcome/welcome_widget.dart';
 
@@ -24,8 +25,17 @@ class MyApp extends StatelessWidget {
         '/auth': (context) => const AuthWidget(),
         '/sign_up': (context) => const SignUpWidget(),
         '/main': (context) => const MainScreenWidget(),
+        '/main/movie_details': (context) {
+          final id = ModalRoute.of(context)?.settings.arguments;
+          if (id is int){
+            return MovieDetailsWidget(movieId: id);
+          } else{
+            return const MovieDetailsWidget(movieId: 0);
+          }
+
+        },
       },
-      initialRoute: '/welcome',
+      initialRoute: '/main/movie_details',
     );
   }
 }

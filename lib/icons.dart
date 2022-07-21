@@ -19,4 +19,7 @@ abstract class AppIcons {
   static const microTwo = 'assets/svg/micro-two.svg';
   static const visible = 'assets/svg/visible.svg';
   static const movit = 'assets/svg/movit.svg';
+  static const star = 'assets/svg/star.svg';
+  static const pause = 'assets/svg/pause.svg';
+  static const clock = 'assets/svg/clock.svg';
 }

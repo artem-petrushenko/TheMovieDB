@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:themoviedb/theme/app_colors.dart';
 
 final ThemeData themeData = ThemeData(
-  // brightness: Brightness.dark,
   fontFamily: 'Roboto',
   backgroundColor: AppColors.kBackgroundColor,
   scaffoldBackgroundColor: AppColors.kBackgroundColor,
@@ -96,7 +95,7 @@ const TextTheme appTextTheme = TextTheme(
   headline5: TextStyle(
       fontSize: 12,
       fontWeight: FontWeight.w300,
-      color: AppColors.kSupportTextColor),
+      color: AppColors.kTextColor),
   headline6: TextStyle(
       fontSize: 18,
       fontWeight: FontWeight.w400,
