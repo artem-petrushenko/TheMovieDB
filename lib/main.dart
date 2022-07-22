@@ -20,19 +20,18 @@ class MyApp extends StatelessWidget {
       title: 'TMDB',
       debugShowCheckedModeBanner: false,
       theme: themeData,
-      routes:{
+      routes: {
         '/': (context) => const WelcomeWidget(),
         '/auth': (context) => const AuthWidget(),
         '/sign_up': (context) => const SignUpWidget(),
         '/main': (context) => const MainScreenWidget(),
         '/main/movie_details': (context) {
           final id = ModalRoute.of(context)?.settings.arguments;
-          if (id is int){
+          if (id is int) {
             return MovieDetailsWidget(movieId: id);
-          } else{
+          } else {
             return const MovieDetailsWidget(movieId: 0);
           }
-
         },
       },
       initialRoute: '/',

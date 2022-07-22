@@ -125,8 +125,7 @@ class _MovieListWidgetState extends State<MovieListWidget> {
                     padding:
                         const EdgeInsets.only(top: 21, left: 26, bottom: 24),
                     child: Text('Search Result',
-                        maxLines: 1,
-                        style: Theme.of(context).textTheme.button),
+                        maxLines: 1, style: Theme.of(context).textTheme.button),
                   ),
                   ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -139,39 +138,55 @@ class _MovieListWidgetState extends State<MovieListWidget> {
                       final movie = _filterMovies[index];
                       return Column(
                         children: [
-                          Container(
-                            clipBehavior: Clip.hardEdge,
-                            width: double.infinity,
-                            height: 120,
-                            decoration: const BoxDecoration(
-                              color: AppColors.kBackgroundWidgetsColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(12),
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-                                Image.asset(movie.imageName),
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(movie.title),
-                                        Text('April 7, 2021'),
-                                        Text(
-                                          'A fanboy of a supervillain supergroup known as the Vicious 6, Gru hatches a plan to become evil enough to join them, with the backup of his followers, the Minions.',
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ],
-                                    ),
+                          Stack(
+                            children: [
+                              Container(
+                                clipBehavior: Clip.hardEdge,
+                                width: double.infinity,
+                                height: 120,
+                                decoration: const BoxDecoration(
+                                  color: AppColors.kBackgroundWidgetsColor,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(12),
                                   ),
-                                )
-                              ],
-                            ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Image.asset(movie.imageName),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(movie.title),
+                                            const Text('April 7, 2021'),
+                                            const Text(
+                                              'A fanboy of a supervillain supergroup known as the Vicious 6, Gru hatches a plan to become evil enough to join them, with the backup of his followers, the Minions.',
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                width: double.infinity,
+                                height: 120,
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    hoverColor: Colors.grey[400],
+                                    borderRadius: BorderRadius.circular(12),
+                                    onTap: () => _onMovieTap(index),
+                                  ),
+                                ),
+                              ),
+                            ],
                           )
                         ],
                       );
