@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: themeData,
       routes:{
-        '/welcome': (context) => const WelcomeWidget(),
+        '/': (context) => const WelcomeWidget(),
         '/auth': (context) => const AuthWidget(),
         '/sign_up': (context) => const SignUpWidget(),
         '/main': (context) => const MainScreenWidget(),
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
 
         },
       },
-      initialRoute: '/main/movie_details',
+      initialRoute: '/',
     );
   }
 }

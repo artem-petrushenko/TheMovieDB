@@ -10,40 +10,8 @@ class MovieDetailsMainInfoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: const [
-        _TopImageWidget(),
         _MovieNameWidget(),
         _StoryLineWidget(),
-      ],
-    );
-  }
-}
-
-class _TopImageWidget extends StatelessWidget {
-  const _TopImageWidget({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        const Image(
-          height: 280,
-          image: AssetImage('assets/images/image.jpg'),
-          fit: BoxFit.fitHeight,
-        ),
-        Positioned(
-          top: 16 + MediaQuery.of(context).padding.top,
-          right: 20,
-          left: 20,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                  onPressed: () {}, icon: SvgPicture.asset(AppIcons.arrowLeft)),
-              IconButton(
-                  onPressed: () {}, icon: SvgPicture.asset(AppIcons.star))
-            ],
-          ),
-        ),
       ],
     );
   }
