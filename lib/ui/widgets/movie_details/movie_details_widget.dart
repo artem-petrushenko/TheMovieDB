@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import 'package:themoviedb/widgets/movie_details/movie_details_main_info_widget.dart';
-import 'package:themoviedb/widgets/movie_details/movie_details_screen_cast_widget.dart';
+import 'package:themoviedb/ui/widgets/movie_details/movie_details_main_info_widget.dart';
+import 'package:themoviedb/ui/widgets/movie_details/movie_details_screen_cast_widget.dart';
 
 import 'package:themoviedb/icons.dart';
-import 'package:themoviedb/theme/app_colors.dart';
+import 'package:themoviedb/ui/theme/app_colors.dart';
 
 class MovieDetailsWidget extends StatefulWidget {
   final int movieId;

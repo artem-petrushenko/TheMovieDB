@@ -3,17 +3,18 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import 'package:themoviedb/theme/app_colors.dart';
+import 'package:themoviedb/ui/theme/app_colors.dart';
 import 'package:themoviedb/icons.dart';
 
-class AuthWidget extends StatefulWidget {
-  const AuthWidget({Key? key}) : super(key: key);
+class SignUpWidget extends StatefulWidget {
+  const SignUpWidget({Key? key}) : super(key: key);
 
   @override
-  State<AuthWidget> createState() => _AuthWidgetState();
+  State<SignUpWidget> createState() => _SignUpWidgetState();
 }
 
-class _AuthWidgetState extends State<AuthWidget> {
+class _SignUpWidgetState extends State<SignUpWidget> {
+  final _nameTextController = TextEditingController();
   final _loginTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
 
@@ -28,19 +29,20 @@ class _AuthWidgetState extends State<AuthWidget> {
   }
 
   void _login() {
+    Navigator.of(context).pushReplacementNamed('/auth');
+  }
+
+  void _createAccount() {
+    final name = _nameTextController.text;
     final login = _loginTextController.text;
     final password = _passwordTextController.text;
 
-    if (login == 'admin' && password == 'admin') {
+    if (login == 'admin' && password == 'admin' && name == 'admin') {
       log('Ok');
     } else {
       log('Not ok');
     }
     Navigator.of(context).pushReplacementNamed('/main');
-  }
-
-  void _createAccount() {
-    Navigator.of(context).pushReplacementNamed('/sign_up');
   }
 
   void _toggle() {
@@ -61,17 +63,18 @@ class _AuthWidgetState extends State<AuthWidget> {
           onPressed: () {},
         ),
         title: const Text(
-          'Login',
+          'Sign up',
           style: TextStyle(fontWeight: FontWeight.w700, fontSize: 24),
         ),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 23.0, vertical: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 23.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Log in with one of following options',
+              const SizedBox(height: 30),
+              Text('Sign up with one of following options',
                   style: Theme.of(context).textTheme.subtitle1),
               const SizedBox(height: 42),
               Row(
@@ -105,7 +108,21 @@ class _AuthWidgetState extends State<AuthWidget> {
                   ),
                 ],
               ),
-              const SizedBox(height: 44),
+              const SizedBox(height: 48),
+              Text('Name', style: Theme.of(context).textTheme.headline4),
+              const SizedBox(height: 10),
+              TextFormField(
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  textCapitalization: TextCapitalization.words,
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.name,
+                  controller: _nameTextController,
+                  decoration: InputDecoration(
+                      hintText: 'Enter your name',
+                      hintStyle: Theme.of(context).textTheme.overline),
+                  style: Theme.of(context).textTheme.overline),
+              const SizedBox(height: 22),
               Text('Email', style: Theme.of(context).textTheme.headline4),
               const SizedBox(height: 10),
               TextFormField(
@@ -180,8 +197,8 @@ class _AuthWidgetState extends State<AuthWidget> {
                   child: MaterialButton(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(11.0)),
-                    onPressed: _login,
-                    child: Text('Log in',
+                    onPressed: _createAccount,
+                    child: Text('Create Account',
                         style: Theme.of(context).textTheme.headline4),
                   ),
                 ),
@@ -192,7 +209,7 @@ class _AuthWidgetState extends State<AuthWidget> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        "Don't have an account?",
+                        "Already have an account?",
                         style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 18,
@@ -204,10 +221,10 @@ class _AuthWidgetState extends State<AuthWidget> {
                           primary: AppColors.kTextColor,
                         ),
                         onPressed: () {
-                          _createAccount();
+                          _login();
                         },
                         child: const Text(
-                          'Sign up',
+                          'Login',
                           style: TextStyle(
                             fontSize: 18,
                             color: AppColors.kTextColor,

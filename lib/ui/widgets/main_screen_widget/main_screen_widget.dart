@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
-import 'package:themoviedb/theme/app_colors.dart';
+import 'package:themoviedb/ui/theme/app_colors.dart';
 
-import 'package:themoviedb/widgets/movie_list/movie_list_widget.dart';
+import 'package:themoviedb/ui/widgets/movie_list/movie_list_widget.dart';
 
 class MainScreenWidget extends StatefulWidget {
   const MainScreenWidget({Key? key}) : super(key: key);

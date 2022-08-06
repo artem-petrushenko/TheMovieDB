@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:themoviedb/theme/app_colors.dart';
+import 'package:themoviedb/ui/theme/app_colors.dart';
 
 class Movie {
   final int id;

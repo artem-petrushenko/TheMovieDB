@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:themoviedb/icons.dart';
-import 'package:themoviedb/theme/app_colors.dart';
+import 'package:themoviedb/ui/theme/app_colors.dart';
 
 class WelcomeWidget extends StatefulWidget {
   const WelcomeWidget({Key? key}) : super(key: key);

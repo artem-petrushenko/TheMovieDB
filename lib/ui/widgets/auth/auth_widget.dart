@@ -1,56 +1,16 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import 'package:themoviedb/theme/app_colors.dart';
+import 'package:themoviedb/ui/theme/app_colors.dart';
 import 'package:themoviedb/icons.dart';
+import 'package:themoviedb/ui/widgets/auth/auth_model.dart';
 
-class SignUpWidget extends StatefulWidget {
-  const SignUpWidget({Key? key}) : super(key: key);
-
-  @override
-  State<SignUpWidget> createState() => _SignUpWidgetState();
-}
-
-class _SignUpWidgetState extends State<SignUpWidget> {
-  final _nameTextController = TextEditingController();
-  final _loginTextController = TextEditingController();
-  final _passwordTextController = TextEditingController();
-
-  bool _isObscure = true;
-
-  void _signInGoogle() {
-    Navigator.of(context).pushReplacementNamed('/main');
-  }
-
-  void _signInApple() {
-    Navigator.of(context).pushReplacementNamed('/main');
-  }
-
-  void _login() {
-    Navigator.of(context).pushReplacementNamed('/auth');
-  }
-
-  void _createAccount() {
-    final name = _nameTextController.text;
-    final login = _loginTextController.text;
-    final password = _passwordTextController.text;
-
-    if (login == 'admin' && password == 'admin' && name == 'admin') {
-      log('Ok');
-    } else {
-      log('Not ok');
-    }
-    Navigator.of(context).pushReplacementNamed('/main');
-  }
-
-  void _toggle() {
-    _isObscure = !_isObscure;
-  }
+class AuthWidget extends StatelessWidget {
+  const AuthWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final model = AuthProvider.read(context)?.model;
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 64,
@@ -63,25 +23,24 @@ class _SignUpWidgetState extends State<SignUpWidget> {
           onPressed: () {},
         ),
         title: const Text(
-          'Sign up',
+          'Login',
           style: TextStyle(fontWeight: FontWeight.w700, fontSize: 24),
         ),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 23.0),
+          padding: const EdgeInsets.symmetric(horizontal: 23.0, vertical: 30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 30),
-              Text('Sign up with one of following options',
+              Text('Log in with one of following options',
                   style: Theme.of(context).textTheme.subtitle1),
               const SizedBox(height: 42),
               Row(
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: _signInApple,
+                      onPressed: () {},
                       child: Center(
                         child: SvgPicture.asset(
                           AppIcons.apple,
@@ -95,7 +54,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   const SizedBox(width: 14),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: _signInGoogle,
+                      onPressed: () {},
                       child: Center(
                         child: SvgPicture.asset(
                           AppIcons.google,
@@ -108,21 +67,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   ),
                 ],
               ),
-              const SizedBox(height: 48),
-              Text('Name', style: Theme.of(context).textTheme.headline4),
-              const SizedBox(height: 10),
-              TextFormField(
-                  autocorrect: false,
-                  enableSuggestions: false,
-                  textCapitalization: TextCapitalization.words,
-                  textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.name,
-                  controller: _nameTextController,
-                  decoration: InputDecoration(
-                      hintText: 'Enter your name',
-                      hintStyle: Theme.of(context).textTheme.overline),
-                  style: Theme.of(context).textTheme.overline),
-              const SizedBox(height: 22),
+              const SizedBox(height: 44),
               Text('Email', style: Theme.of(context).textTheme.headline4),
               const SizedBox(height: 10),
               TextFormField(
@@ -131,7 +76,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   textCapitalization: TextCapitalization.none,
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
-                  controller: _loginTextController,
+                  controller: model?.loginTextController,
                   decoration: InputDecoration(
                       hintText: 'Enter your email',
                       hintStyle: Theme.of(context).textTheme.overline),
@@ -144,28 +89,25 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   enableSuggestions: false,
                   textCapitalization: TextCapitalization.none,
                   textInputAction: TextInputAction.next,
-                  controller: _passwordTextController,
-                  obscureText: _isObscure == true ? true : false,
+                  controller: model?.passwordTextController,
+                  // obscureText: model?.isObscure == true ? true : false,
                   decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                        splashRadius: 24,
-                        color: AppColors.kIconColor,
-                        icon: SvgPicture.asset(
-                            _isObscure == true
-                                ? AppIcons.invisible
-                                : AppIcons.visible,
-                            width: 15.5,
-                            height: 12.5,
-                            color: AppColors.kIconColor),
-                        onPressed: () {
-                          setState(() {
-                            _toggle();
-                          });
-                        },
-                      ),
+                      // suffixIcon: IconButton(
+                      //   splashRadius: 24,
+                      //   color: AppColors.kIconColor,
+                      //   icon: SvgPicture.asset(
+                      //       _isObscure == true
+                      //           ? AppIcons.invisible
+                      //           : AppIcons.visible,
+                      //       width: 15.5,
+                      //       height: 12.5,
+                      //       color: AppColors.kIconColor),
+                      //   onPressed: () => _toggle(),
+                      // ),
                       hintText: 'Enter your password',
                       hintStyle: Theme.of(context).textTheme.overline),
                   style: Theme.of(context).textTheme.overline),
+              const _ErrorMessageWidget()
             ],
           ),
         ),
@@ -179,29 +121,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
             height: 118,
             child: Column(
               children: [
-                Container(
-                  width: double.infinity,
-                  height: 47,
-                  decoration: ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(11.0)),
-                    gradient: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        AppColors.kSecondGradientColor,
-                        AppColors.kFirstGradientColor
-                      ],
-                    ),
-                  ),
-                  child: MaterialButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(11.0)),
-                    onPressed: _createAccount,
-                    child: Text('Create Account',
-                        style: Theme.of(context).textTheme.headline4),
-                  ),
-                ),
+                _AuthButtonWidget(),
                 const SizedBox(height: 50),
                 SizedBox(
                   height: 21,
@@ -209,7 +129,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        "Already have an account?",
+                        "Don't have an account?",
                         style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 18,
@@ -220,11 +140,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           padding: EdgeInsets.zero,
                           primary: AppColors.kTextColor,
                         ),
-                        onPressed: () {
-                          _login();
-                        },
+                        onPressed: () {},
                         child: const Text(
-                          'Login',
+                          'Sign up',
                           style: TextStyle(
                             fontSize: 18,
                             color: AppColors.kTextColor,
@@ -240,6 +158,62 @@ class _SignUpWidgetState extends State<SignUpWidget> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _AuthButtonWidget extends StatelessWidget {
+  const _AuthButtonWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final model = AuthProvider.watch(context)?.model;
+    final onPressed =
+        model?.canStartAuth == true ? () => model?.auth(context) : null;
+    final child = model?.isAuthProgress == true
+        ? const SizedBox(
+            width: 20,
+            height: 20,
+            child: CircularProgressIndicator(color: AppColors.kTextColor,),
+          )
+        : Text('Log in', style: Theme.of(context).textTheme.headline4);
+    return Container(
+      width: double.infinity,
+      height: 47,
+      decoration: ShapeDecoration(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(11.0)),
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            AppColors.kSecondGradientColor,
+            AppColors.kFirstGradientColor
+          ],
+        ),
+      ),
+      child: MaterialButton(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(11.0)),
+        onPressed: onPressed,
+        child: child,
+      ),
+    );
+  }
+}
+
+class _ErrorMessageWidget extends StatelessWidget {
+  const _ErrorMessageWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final errorMessage = AuthProvider.watch(context)?.model.errorMessage;
+    if (errorMessage == null) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(top: 16.0),
+      child: Text(errorMessage, style: const TextStyle(color: Colors.white)),
     );
   }
 }
