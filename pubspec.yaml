@@ -37,10 +37,16 @@ dependencies:
   google_nav_bar: ^5.0.6
   flutter_svg: ^1.1.1+1
   flutter_secure_storage: ^5.1.0
+  json_annotation: ^4.6.0
+  flutter_localizations:
+    sdk: flutter
+  intl: #Формат дат
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  json_serializable:
+  build_runner: 
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

@@ -4,6 +4,7 @@ import 'package:themoviedb/domain/data_providers/session_data_provider.dart';
 
 import 'package:themoviedb/ui/theme/app_colors.dart';
 import 'package:themoviedb/ui/widgets/main_screen_widget/main_screen_model.dart';
+import 'package:themoviedb/ui/widgets/movie_list/movie_list_model.dart';
 
 import 'package:themoviedb/ui/widgets/movie_list/movie_list_widget.dart';
 
@@ -18,6 +19,7 @@ class MainScreenWidget extends StatefulWidget {
 
 class _MainScreenWidgetState extends State<MainScreenWidget> {
   int _selectedIndex = 0;
+  final movieListModel = MovieListModel();
 
   void _onItemTapped(int index) {
     if (_selectedIndex == index) return;
@@ -27,18 +29,29 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    movieListModel.setupLocale(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.read<MainScreenModel>(context);
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
         children: [
           const Text('News'),
-          const MovieListWidget(),
+          NotifierProvider(
+            model: movieListModel,
+            child: const MovieListWidget(),
+          ),
           Center(
-              child: ElevatedButton(
-                  onPressed: () => SessionDataProvider().setSessionId(null),
-                  child: const Text('Log Out'))),
+            child: ElevatedButton(
+              onPressed: () => SessionDataProvider().setSessionId(null),
+              child: const Text('Log Out'),
+            ),
+          ),
         ],
       ),
       bottomNavigationBar: Container(

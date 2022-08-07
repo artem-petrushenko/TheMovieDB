@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:themoviedb/domain/entity/popular_movie_response.dart';
+
 enum ApiClientExceptionType { network, auth, other }
 
 class ApiClientException implements Exception {
@@ -14,6 +16,8 @@ class ApiClient {
   static const _host = 'https://api.themoviedb.org/3';
   static const _imageUrl = 'https://image.tmdb.org/t/p/w500';
   static const _apiKey = '8f4aaf7ab14f73e09d160b1dd88b673b';
+
+  static String imageUrl(String path) => _imageUrl + path;
 
   Future<String> auth({
     required String username,
@@ -69,13 +73,11 @@ class ApiClient {
     try {
       final url = _makeUri(path, urlParameters);
       final request = await _client.postUrl(url);
-
       request.headers.contentType = ContentType.json;
       request.write(jsonEncode(bodyParameters));
       final response = await request.close();
       final dynamic json = (await response.jsonDecode());
       _validationResponse(response, json);
-
       final result = parser(json);
       return result;
     } on SocketException {
@@ -97,6 +99,26 @@ class ApiClient {
       '/authentication/token/new',
       parser,
       <String, dynamic>{'api_key': _apiKey},
+    );
+    return result;
+  }
+
+  Future<PopularMovieResponse> popularMovie(int page, String locale) async {
+    final parser = (dynamic json) {
+      final jsonMap = json as Map<String, dynamic>;
+      final response = PopularMovieResponse.fromJson(jsonMap);
+      print(1);
+      return response;
+    };
+
+    final result = _get(
+      '/movie/popular',
+      parser,
+      <String, dynamic>{
+        'api_key': _apiKey,
+        'page': page.toString(),
+        'language': locale,
+      },
     );
     return result;
   }

@@ -1,86 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:themoviedb/domain/api_client/api_client.dart';
+import 'package:themoviedb/library/widgets/inherited/provider.dart';
 import 'package:themoviedb/ui/theme/app_colors.dart';
+import 'package:themoviedb/ui/widgets/movie_list/movie_list_model.dart';
 
-import 'package:themoviedb/ui/navigation/main_navigation.dart';
-
-class Movie {
-  final int id;
-  final String imageName;
-  final String title;
-
-  Movie({required this.id, required this.imageName, required this.title});
-}
-
-class MovieListWidget extends StatefulWidget {
+class MovieListWidget extends StatelessWidget {
   const MovieListWidget({Key? key}) : super(key: key);
 
   @override
-  State<MovieListWidget> createState() => _MovieListWidgetState();
-}
-
-class _MovieListWidgetState extends State<MovieListWidget> {
-  final _movies = [
-    Movie(imageName: 'assets/images/minions.jpg', title: 'Minions', id: 1),
-    Movie(imageName: 'assets/images/minions.jpg', title: 'The Batman', id: 2),
-    Movie(imageName: 'assets/images/minions.jpg', title: 'Moon Knight', id: 3),
-    Movie(
-        imageName: 'assets/images/minions.jpg',
-        title: 'Spider-Man: No Way Home',
-        id: 4),
-    Movie(imageName: 'assets/images/minions.jpg', title: 'Shrek', id: 5),
-    Movie(imageName: 'assets/images/minions.jpg', title: 'Deadpool', id: 6),
-    Movie(
-        imageName: 'assets/images/minions.jpg', title: 'After We Fell', id: 7),
-    Movie(imageName: 'assets/images/minions.jpg', title: 'Knowing', id: 8),
-    Movie(
-        imageName: 'assets/images/minions.jpg',
-        title: 'Sonic the Hedgehog 2',
-        id: 9),
-    Movie(
-        imageName: 'assets/images/minions.jpg',
-        title: 'Stranger Things',
-        id: 10),
-    Movie(
-        imageName: 'assets/images/minions.jpg',
-        title: 'The Good Doctor',
-        id: 11),
-    Movie(
-        imageName: 'assets/images/minions.jpg',
-        title: 'The Man from Toronto',
-        id: 12),
-  ];
-
-  final _searchController = TextEditingController();
-
-  var _filterMovies = <Movie>[];
-
-  void _searchMovies() {
-    final query = _searchController.text;
-    if (query.isNotEmpty) {
-      _filterMovies = _movies.where((Movie movie) {
-        return movie.title.toLowerCase().contains(query.toLowerCase());
-      }).toList();
-    } else {
-      _filterMovies = _movies;
-    }
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    _filterMovies = _movies;
-    _searchController.addListener(_searchMovies);
-    super.initState();
-  }
-
-  void _onMovieTap(int index) {
-    final id = _movies[index].id;
-    Navigator.of(context)
-        .pushNamed(MainNavigationRouteNames.movieDetailsScreen, arguments: id);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final model = NotifierProvider.watch<MovieListModel>(context);
+    if (model == null) return const SizedBox.shrink();
     return Padding(
       padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 8),
       child: Column(
@@ -88,7 +18,6 @@ class _MovieListWidgetState extends State<MovieListWidget> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: TextFormField(
-              controller: _searchController,
               decoration: InputDecoration(
                   focusedBorder: const OutlineInputBorder(
                     borderSide: BorderSide.none,
@@ -134,11 +63,12 @@ class _MovieListWidgetState extends State<MovieListWidget> {
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: _filterMovies.length,
+                    itemCount: model.movies.length,
                     separatorBuilder: (BuildContext context, int index) =>
                         const SizedBox(height: 22),
                     itemBuilder: (BuildContext context, int index) {
-                      final movie = _filterMovies[index];
+                      final movie = model.movies[index];
+                      final posterPath = movie.posterPath;
                       return Column(
                         children: [
                           Stack(
@@ -155,7 +85,12 @@ class _MovieListWidgetState extends State<MovieListWidget> {
                                 ),
                                 child: Row(
                                   children: [
-                                    Image.asset(movie.imageName),
+                                    posterPath != null
+                                        ? Image.network(
+                                            ApiClient.imageUrl(posterPath),
+                                            width: 95,
+                                          )
+                                        : const SizedBox.shrink(),
                                     Expanded(
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
@@ -164,16 +99,19 @@ class _MovieListWidgetState extends State<MovieListWidget> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(movie.title),
-                                            const Text('April 7, 2021'),
-                                            const Text(
-                                                'A fanboy of a supervillain supergroup known as the Vicious 6, Gru hatches a plan to become evil enough to join them, with the backup of his followers, the Minions.',
-                                                maxLines: 2,
-                                                overflow:
-                                                    TextOverflow.ellipsis),
+                                            Text(
+                                              model.stringFromDate(
+                                                  movie.releaseDate),
+                                            ),
+                                            Text(
+                                              movie.overview,
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
                                           ],
                                         ),
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
                               ),
@@ -185,7 +123,8 @@ class _MovieListWidgetState extends State<MovieListWidget> {
                                   child: InkWell(
                                     hoverColor: Colors.grey[400],
                                     borderRadius: BorderRadius.circular(12),
-                                    onTap: () => _onMovieTap(index),
+                                    onTap: () =>
+                                        model.onMovieTap(context, index),
                                   ),
                                 ),
                               ),
@@ -195,82 +134,6 @@ class _MovieListWidgetState extends State<MovieListWidget> {
                       );
                     },
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 26),
-                  //   child: Text('Most popular',
-                  //       maxLines: 1, style: Theme.of(context).textTheme.button),
-                  // ),
-                  // SizedBox(
-                  //   height: 247,
-                  //   child: ListView.separated(
-                  //     scrollDirection: Axis.horizontal,
-                  //     padding: const EdgeInsets.symmetric(horizontal: 25),
-                  //     shrinkWrap: true,
-                  //     itemCount: _movies.length,
-                  //     separatorBuilder: (BuildContext context, int index) =>
-                  //         const SizedBox(width: 22),
-                  //     itemBuilder: (BuildContext context, int index) {
-                  //       final movie = _filterMovies[index];
-                  //       return Column(children: [
-                  //         Container(
-                  //           clipBehavior: Clip.hardEdge,
-                  //           width: 150,
-                  //           height: 215,
-                  //           decoration: const BoxDecoration(
-                  //             color: AppColors.kBackgroundWidgetsColor,
-                  //             borderRadius: BorderRadius.all(
-                  //               Radius.circular(12),
-                  //             ),
-                  //           ),
-                  //           child: Image.asset(
-                  //             movie.imageName,
-                  //             fit: BoxFit.fitWidth,
-                  //           ),
-                  //         ),
-                  //         SizedBox(height: 12),
-                  //         Text(movie.title)
-                  //       ]);
-                  //     },
-                  //   ),
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 26),
-                  //   child: Text('New',
-                  //       maxLines: 1, style: Theme.of(context).textTheme.button),
-                  // ),
-                  // SizedBox(
-                  //   height: 247,
-                  //   child: ListView.separated(
-                  //     scrollDirection: Axis.horizontal,
-                  //     padding: const EdgeInsets.symmetric(horizontal: 25),
-                  //     shrinkWrap: true,
-                  //     itemCount: _movies.length,
-                  //     separatorBuilder: (BuildContext context, int index) =>
-                  //         const SizedBox(width: 22),
-                  //     itemBuilder: (BuildContext context, int index) {
-                  //       final movie = _filterMovies[index];
-                  //       return Column(children: [
-                  //         Container(
-                  //           clipBehavior: Clip.hardEdge,
-                  //           width: 150,
-                  //           height: 215,
-                  //           decoration: const BoxDecoration(
-                  //             color: AppColors.kBackgroundWidgetsColor,
-                  //             borderRadius: BorderRadius.all(
-                  //               Radius.circular(12),
-                  //             ),
-                  //           ),
-                  //           child: Image.asset(
-                  //             movie.imageName,
-                  //             fit: BoxFit.fitWidth,
-                  //           ),
-                  //         ),
-                  //         const SizedBox(height: 12),
-                  //         Text(movie.title)
-                  //       ]);
-                  //     },
-                  //   ),
-                  // ),
                 ],
               ),
             ),
