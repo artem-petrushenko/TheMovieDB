@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:themoviedb/domain/api_client/api_client.dart';
 import 'package:themoviedb/domain/data_providers/session_data_provider.dart';
+import 'package:themoviedb/ui/navigation/main_navigation.dart';
 
 class AuthModel extends ChangeNotifier {
   final _sessionDataProvider = SessionDataProvider();
@@ -22,12 +23,17 @@ class AuthModel extends ChangeNotifier {
 
   bool get isAuthProgress => _isAuthProgress;
 
-  void _toggle() {
+  void toggle() {
     _isObscure = !_isObscure;
   }
 
-  Future<void> auth(BuildContext context) async {
+  void createAccount() {}
 
+  Future<void> authWithGoogle() async {}
+
+  Future<void> authWithApple() async {}
+
+  Future<void> auth(BuildContext context) async {
     final login = loginTextController.text;
     final password = passwordTextController.text;
     if (login.isEmpty || password.isEmpty) {
@@ -40,42 +46,35 @@ class AuthModel extends ChangeNotifier {
     notifyListeners();
     String? sessionId;
     try {
-      sessionId =
-          await _apiClient.auth(username: login, password: password);
-    } catch (e) {
-      _errorMessage = 'Error';
+      sessionId = await _apiClient.auth(
+        username: login,
+        password: password,
+      );
+    } on ApiClientException catch (e) {
+      switch (e.type) {
+        case ApiClientExceptionType.network:
+          _errorMessage = 'Server is not available';
+          break;
+        case ApiClientExceptionType.auth:
+          _errorMessage = 'Incorrect login or password';
+          break;
+        case ApiClientExceptionType.other:
+          _errorMessage = 'An error has occurred. Try again';
+          break;
+      }
     }
     _isAuthProgress = false;
-    if (_errorMessage != null){
+    if (_errorMessage != null) {
       notifyListeners();
       return;
     }
-    if(sessionId == null){
+    if (sessionId == null) {
       _errorMessage = 'Error Session';
       notifyListeners();
       return;
     }
     await _sessionDataProvider.setSessionId(sessionId);
-    unawaited(Navigator.of(context).pushNamed('/main'));
-  }
-}
-
-class AuthProvider extends InheritedNotifier {
-  final AuthModel model;
-
-  const AuthProvider({
-    Key? key,
-    required this.model,
-    required Widget child,
-  }) : super(key: key, notifier: model, child: child);
-
-  static AuthProvider? watch(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<AuthProvider>();
-  }
-
-  static AuthProvider? read(BuildContext context) {
-    final widget =
-        context.getElementForInheritedWidgetOfExactType<AuthProvider>()?.widget;
-    return widget is AuthProvider ? widget : null;
+    unawaited(Navigator.of(context)
+        .pushReplacementNamed(MainNavigationRouteNames.mainScreen));
   }
 }

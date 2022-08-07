@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:themoviedb/domain/data_providers/session_data_provider.dart';
 
 import 'package:themoviedb/ui/theme/app_colors.dart';
+import 'package:themoviedb/ui/widgets/main_screen_widget/main_screen_model.dart';
 
 import 'package:themoviedb/ui/widgets/movie_list/movie_list_widget.dart';
+
+import 'package:themoviedb/library/widgets/inherited/provider.dart';
 
 class MainScreenWidget extends StatefulWidget {
   const MainScreenWidget({Key? key}) : super(key: key);
@@ -24,13 +28,17 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final model = NotifierProvider.read<MainScreenModel>(context);
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
-        children: const [
-          Text('News'),
-          MovieListWidget(),
-          Text('Series'),
+        children: [
+          const Text('News'),
+          const MovieListWidget(),
+          Center(
+              child: ElevatedButton(
+                  onPressed: () => SessionDataProvider().setSessionId(null),
+                  child: const Text('Log Out'))),
         ],
       ),
       bottomNavigationBar: Container(

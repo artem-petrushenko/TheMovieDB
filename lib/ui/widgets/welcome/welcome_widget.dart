@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:themoviedb/icons.dart';
+import 'package:themoviedb/ui/navigation/main_navigation.dart';
 import 'package:themoviedb/ui/theme/app_colors.dart';
 
 class WelcomeWidget extends StatefulWidget {
@@ -13,7 +14,7 @@ class WelcomeWidget extends StatefulWidget {
 
 class _WelcomeWidgetState extends State<WelcomeWidget> {
   void _nextPage() {
-    Navigator.of(context).pushReplacementNamed('/auth');
+    Navigator.of(context).pushReplacementNamed(MainNavigationRouteNames.authScreen);
   }
 
   @override

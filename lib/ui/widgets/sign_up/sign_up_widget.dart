@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:themoviedb/ui/navigation/main_navigation.dart';
 
 import 'package:themoviedb/ui/theme/app_colors.dart';
 import 'package:themoviedb/icons.dart';
@@ -21,15 +22,15 @@ class _SignUpWidgetState extends State<SignUpWidget> {
   bool _isObscure = true;
 
   void _signInGoogle() {
-    Navigator.of(context).pushReplacementNamed('/main');
+    Navigator.of(context).pushReplacementNamed(MainNavigationRouteNames.mainScreen);
   }
 
   void _signInApple() {
-    Navigator.of(context).pushReplacementNamed('/main');
+    Navigator.of(context).pushReplacementNamed(MainNavigationRouteNames.mainScreen);
   }
 
   void _login() {
-    Navigator.of(context).pushReplacementNamed('/auth');
+    Navigator.of(context).pushReplacementNamed(MainNavigationRouteNames.authScreen);
   }
 
   void _createAccount() {
@@ -42,7 +43,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
     } else {
       log('Not ok');
     }
-    Navigator.of(context).pushReplacementNamed('/main');
+    Navigator.of(context).pushReplacementNamed(MainNavigationRouteNames.mainScreen);
   }
 
   void _toggle() {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:themoviedb/ui/theme/app_colors.dart';
 
+import 'package:themoviedb/ui/navigation/main_navigation.dart';
+
 class Movie {
   final int id;
   final String imageName;
@@ -73,7 +75,8 @@ class _MovieListWidgetState extends State<MovieListWidget> {
 
   void _onMovieTap(int index) {
     final id = _movies[index].id;
-    Navigator.of(context).pushNamed('/main/movie_details', arguments: id);
+    Navigator.of(context)
+        .pushNamed(MainNavigationRouteNames.movieDetailsScreen, arguments: id);
   }
 
   @override
@@ -163,10 +166,10 @@ class _MovieListWidgetState extends State<MovieListWidget> {
                                             Text(movie.title),
                                             const Text('April 7, 2021'),
                                             const Text(
-                                              'A fanboy of a supervillain supergroup known as the Vicious 6, Gru hatches a plan to become evil enough to join them, with the backup of his followers, the Minions.',
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis
-                                            ),
+                                                'A fanboy of a supervillain supergroup known as the Vicious 6, Gru hatches a plan to become evil enough to join them, with the backup of his followers, the Minions.',
+                                                maxLines: 2,
+                                                overflow:
+                                                    TextOverflow.ellipsis),
                                           ],
                                         ),
                                       ),

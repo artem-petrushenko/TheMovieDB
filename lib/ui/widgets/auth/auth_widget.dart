@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import 'package:themoviedb/ui/theme/app_colors.dart';
 import 'package:themoviedb/icons.dart';
+import 'package:themoviedb/library/widgets/inherited/provider.dart';
+import 'package:themoviedb/ui/theme/app_colors.dart';
 import 'package:themoviedb/ui/widgets/auth/auth_model.dart';
 
 class AuthWidget extends StatelessWidget {
@@ -10,37 +11,37 @@ class AuthWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = AuthProvider.read(context)?.model;
+    final model = NotifierProvider.read<AuthModel>(context);
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 64,
-        elevation: 0,
+        toolbarHeight: 64.0,
+        elevation: 0.0,
         titleSpacing: 0.0,
         leading: IconButton(
-          splashRadius: 24,
+          splashRadius: 24.0,
           icon: SvgPicture.asset(AppIcons.arrowLeft,
-              width: 14, height: 15, color: AppColors.kTextColor),
+              width: 14.0, height: 15.0, color: AppColors.kTextColor),
           onPressed: () {},
         ),
         title: const Text(
           'Login',
-          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 24),
+          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 24.0),
         ),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 23.0, vertical: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 23.0, vertical: 30.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Log in with one of following options',
                   style: Theme.of(context).textTheme.subtitle1),
-              const SizedBox(height: 42),
+              const SizedBox(height: 42.0),
               Row(
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: model?.authWithApple,
                       child: Center(
                         child: SvgPicture.asset(
                           AppIcons.apple,
@@ -54,7 +55,7 @@ class AuthWidget extends StatelessWidget {
                   const SizedBox(width: 14),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: model?.authWithGoogle,
                       child: Center(
                         child: SvgPicture.asset(
                           AppIcons.google,
@@ -67,9 +68,9 @@ class AuthWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 44),
+              const SizedBox(height: 44.0),
               Text('Email', style: Theme.of(context).textTheme.headline4),
-              const SizedBox(height: 10),
+              const SizedBox(height: 10.0),
               TextFormField(
                   autocorrect: false,
                   enableSuggestions: false,
@@ -81,9 +82,9 @@ class AuthWidget extends StatelessWidget {
                       hintText: 'Enter your email',
                       hintStyle: Theme.of(context).textTheme.overline),
                   style: Theme.of(context).textTheme.overline),
-              const SizedBox(height: 22),
+              const SizedBox(height: 22.0),
               Text('Password', style: Theme.of(context).textTheme.headline4),
-              const SizedBox(height: 10),
+              const SizedBox(height: 10.0),
               TextFormField(
                   autocorrect: false,
                   enableSuggestions: false,
@@ -93,16 +94,16 @@ class AuthWidget extends StatelessWidget {
                   // obscureText: model?.isObscure == true ? true : false,
                   decoration: InputDecoration(
                       // suffixIcon: IconButton(
-                      //   splashRadius: 24,
+                      //   splashRadius: 24.0,
                       //   color: AppColors.kIconColor,
                       //   icon: SvgPicture.asset(
-                      //       _isObscure == true
+                      //       model?.isObscure == true
                       //           ? AppIcons.invisible
                       //           : AppIcons.visible,
                       //       width: 15.5,
                       //       height: 12.5,
                       //       color: AppColors.kIconColor),
-                      //   onPressed: () => _toggle(),
+                      //   onPressed: () => model?.toggle(),
                       // ),
                       hintText: 'Enter your password',
                       hintStyle: Theme.of(context).textTheme.overline),
@@ -115,16 +116,16 @@ class AuthWidget extends StatelessWidget {
       bottomNavigationBar: BottomAppBar(
         color: AppColors.kBackgroundColor,
         child: Padding(
-          padding:
-              const EdgeInsets.only(right: 26, left: 26, bottom: 60, top: 16),
+          padding: const EdgeInsets.only(
+              right: 26.0, left: 26.0, bottom: 60.0, top: 16.0),
           child: SizedBox(
             height: 118,
             child: Column(
               children: [
-                _AuthButtonWidget(),
-                const SizedBox(height: 50),
+                const _AuthButtonWidget(),
+                const SizedBox(height: 50.0),
                 SizedBox(
-                  height: 21,
+                  height: 21.0,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -144,7 +145,7 @@ class AuthWidget extends StatelessWidget {
                         child: const Text(
                           'Sign up',
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 18.0,
                             color: AppColors.kTextColor,
                             fontWeight: FontWeight.w700,
                           ),
@@ -169,14 +170,16 @@ class _AuthButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = AuthProvider.watch(context)?.model;
+    final model = NotifierProvider.watch<AuthModel>(context);
     final onPressed =
         model?.canStartAuth == true ? () => model?.auth(context) : null;
     final child = model?.isAuthProgress == true
         ? const SizedBox(
-            width: 20,
-            height: 20,
-            child: CircularProgressIndicator(color: AppColors.kTextColor,),
+            width: 20.0,
+            height: 20.0,
+            child: CircularProgressIndicator(
+              color: AppColors.kTextColor,
+            ),
           )
         : Text('Log in', style: Theme.of(context).textTheme.headline4);
     return Container(
@@ -209,7 +212,7 @@ class _ErrorMessageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final errorMessage = AuthProvider.watch(context)?.model.errorMessage;
+    final errorMessage = NotifierProvider.watch<AuthModel>(context)?.errorMessage;
     if (errorMessage == null) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.only(top: 16.0),
