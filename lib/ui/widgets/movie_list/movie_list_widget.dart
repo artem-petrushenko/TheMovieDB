@@ -18,6 +18,7 @@ class MovieListWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: TextFormField(
+              onChanged: model.searchMovie,
               decoration: InputDecoration(
                   focusedBorder: const OutlineInputBorder(
                     borderSide: BorderSide.none,
