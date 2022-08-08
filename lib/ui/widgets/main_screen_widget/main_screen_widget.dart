@@ -3,7 +3,6 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:themoviedb/domain/data_providers/session_data_provider.dart';
 
 import 'package:themoviedb/ui/theme/app_colors.dart';
-import 'package:themoviedb/ui/widgets/main_screen_widget/main_screen_model.dart';
 import 'package:themoviedb/ui/widgets/movie_list/movie_list_model.dart';
 
 import 'package:themoviedb/ui/widgets/movie_list/movie_list_widget.dart';

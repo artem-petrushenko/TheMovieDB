@@ -107,7 +107,6 @@ class ApiClient {
     final parser = (dynamic json) {
       final jsonMap = json as Map<String, dynamic>;
       final response = PopularMovieResponse.fromJson(jsonMap);
-      print(1);
       return response;
     };
 
