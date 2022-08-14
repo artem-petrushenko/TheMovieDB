@@ -30,7 +30,10 @@ class AuthWidget extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 23.0, vertical: 30.0),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 23.0,
+            vertical: 30.0,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -91,7 +94,7 @@ class AuthWidget extends StatelessWidget {
                   textCapitalization: TextCapitalization.none,
                   textInputAction: TextInputAction.next,
                   controller: model?.passwordTextController,
-                  // obscureText: model?.isObscure == true ? true : false,
+                  obscureText: model?.isObscure == true ? true : false,
                   decoration: InputDecoration(
                       // suffixIcon: IconButton(
                       //   splashRadius: 24.0,
@@ -114,6 +117,7 @@ class AuthWidget extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
+        elevation: 0.0,
         color: AppColors.kBackgroundColor,
         child: Padding(
           padding: const EdgeInsets.only(
@@ -132,9 +136,10 @@ class AuthWidget extends StatelessWidget {
                       const Text(
                         "Don't have an account?",
                         style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 18,
-                            color: AppColors.kSupportTextColor),
+                          fontWeight: FontWeight.w400,
+                          fontSize: 18,
+                          color: AppColors.kSupportTextColor,
+                        ),
                       ),
                       TextButton(
                         style: TextButton.styleFrom(
@@ -212,7 +217,8 @@ class _ErrorMessageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final errorMessage = NotifierProvider.watch<AuthModel>(context)?.errorMessage;
+    final errorMessage =
+        NotifierProvider.watch<AuthModel>(context)?.errorMessage;
     if (errorMessage == null) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.only(top: 16.0),

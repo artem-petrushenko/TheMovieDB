@@ -54,6 +54,7 @@ const InputDecorationTheme appInputDecorationTheme = InputDecorationTheme(
   contentPadding: EdgeInsets.only(left: 15.0),
   fillColor: AppColors.kBackgroundWidgetsColor,
   filled: true,
+
   focusedBorder: OutlineInputBorder(
     borderSide: BorderSide.none,
     borderRadius: BorderRadius.all(
@@ -61,12 +62,15 @@ const InputDecorationTheme appInputDecorationTheme = InputDecorationTheme(
     ),
   ),
   border: OutlineInputBorder(
+    borderSide: BorderSide.none,
     borderRadius: BorderRadius.all(
       Radius.circular(11.0),
     ),
-    borderSide: BorderSide(
-      color: Colors.transparent,
-      width: 0,
+  ),
+  enabledBorder: OutlineInputBorder(
+    borderSide: BorderSide.none,
+    borderRadius: BorderRadius.all(
+      Radius.circular(11.0),
     ),
   ),
 );
@@ -93,9 +97,7 @@ const TextTheme appTextTheme = TextTheme(
       fontSize: 15, fontWeight: FontWeight.w400, color: AppColors.kTextColor),
   // Рейтинг, жанр и время в инфе о фильме
   headline5: TextStyle(
-      fontSize: 12,
-      fontWeight: FontWeight.w300,
-      color: AppColors.kTextColor),
+      fontSize: 12, fontWeight: FontWeight.w300, color: AppColors.kTextColor),
   headline6: TextStyle(
       fontSize: 18,
       fontWeight: FontWeight.w400,

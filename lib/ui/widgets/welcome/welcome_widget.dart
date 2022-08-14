@@ -2,31 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:themoviedb/icons.dart';
-import 'package:themoviedb/ui/navigation/main_navigation.dart';
 import 'package:themoviedb/ui/theme/app_colors.dart';
+import 'package:themoviedb/ui/widgets/welcome/welcome_model.dart';
+import 'package:themoviedb/library/widgets/inherited/provider.dart';
 
-class WelcomeWidget extends StatefulWidget {
+class WelcomeWidget extends StatelessWidget {
   const WelcomeWidget({Key? key}) : super(key: key);
 
   @override
-  State<WelcomeWidget> createState() => _WelcomeWidgetState();
-}
-
-class _WelcomeWidgetState extends State<WelcomeWidget> {
-  void _nextPage() {
-    Navigator.of(context).pushReplacementNamed(MainNavigationRouteNames.authScreen);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final model = NotifierProvider.read<WelcomeModel>(context);
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
         children: [
           Center(
             child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 92),
-                child: SvgPicture.asset(AppIcons.movit)),
+              padding: const EdgeInsets.symmetric(horizontal: 92),
+              child: SvgPicture.asset(AppIcons.movit),
+            ),
           ),
           Positioned(
             bottom: 131,
@@ -37,7 +31,8 @@ class _WelcomeWidgetState extends State<WelcomeWidget> {
               height: 47,
               decoration: ShapeDecoration(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(11.0)),
+                  borderRadius: BorderRadius.circular(11.0),
+                ),
                 gradient: const LinearGradient(
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
@@ -49,8 +44,9 @@ class _WelcomeWidgetState extends State<WelcomeWidget> {
               ),
               child: MaterialButton(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(11.0)),
-                onPressed: _nextPage,
+                  borderRadius: BorderRadius.circular(11.0),
+                ),
+                onPressed: () => model?.openAuthScreen(context),
                 child: Text('Get started',
                     style: Theme.of(context).textTheme.headline4),
               ),

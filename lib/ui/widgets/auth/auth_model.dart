@@ -25,6 +25,7 @@ class AuthModel extends ChangeNotifier {
 
   void toggle() {
     _isObscure = !_isObscure;
+    // notifyListeners();
   }
 
   void createAccount() {}
