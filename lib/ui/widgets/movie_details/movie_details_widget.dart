@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:themoviedb/domain/api_client/api_client.dart';
 import 'package:themoviedb/library/widgets/inherited/provider.dart';
 
 import 'package:themoviedb/ui/widgets/movie_details/movie_details_main_info_widget.dart';
@@ -8,10 +9,9 @@ import 'package:themoviedb/ui/widgets/movie_details/movie_details_screen_cast_wi
 import 'package:themoviedb/icons.dart';
 import 'package:themoviedb/ui/theme/app_colors.dart';
 
-import 'package:themoviedb/ui/widgets/movie_details/movie_datails_model.dart';
+import 'package:themoviedb/ui/widgets/movie_details/movie_details_model.dart';
 
 class MovieDetailsWidget extends StatefulWidget {
-
   const MovieDetailsWidget({Key? key}) : super(key: key);
 
   @override
@@ -27,24 +27,15 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            const _MovieDetailsSliverAppBarWidget(),
-            SliverList(
-              delegate: SliverChildListDelegate([
-                const MovieDetailsMainInfoWidget(),
-                const MovieDetailsScreenCastWidget()
-              ]),
-            )
-          ],
-        ),
-        bottomNavigationBar: const _MovieDetailsBottomNavigationBarWidget());
+    return const Scaffold(
+      body: _BodyWidget(),
+      bottomNavigationBar: _BottomNavigationBarWidget(),
+    );
   }
 }
 
-class _MovieDetailsBottomNavigationBarWidget extends StatelessWidget {
-  const _MovieDetailsBottomNavigationBarWidget({
+class _BottomNavigationBarWidget extends StatelessWidget {
+  const _BottomNavigationBarWidget({
     Key? key,
   }) : super(key: key);
 
@@ -94,7 +85,7 @@ class _MovieDetailsBottomNavigationBarWidget extends StatelessWidget {
                     height: 18,
                     color: const Color.fromRGBO(17, 24, 39, 1),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -104,40 +95,60 @@ class _MovieDetailsBottomNavigationBarWidget extends StatelessWidget {
   }
 }
 
-class _MovieDetailsSliverAppBarWidget extends StatelessWidget {
-  const _MovieDetailsSliverAppBarWidget({
+class _SliverAppBarWidget extends StatelessWidget {
+  const _SliverAppBarWidget({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    void _backToMovies() {
-      Navigator.of(context).pop();
-    }
+    final model = NotifierProvider.watch<MovieDetailsModel>(context);
+    final backdropPath = model?.movieDetails?.backdropPath;
 
     return SliverAppBar(
       leading: IconButton(
         icon: SvgPicture.asset(AppIcons.arrowLeft),
         tooltip: 'Back',
-        onPressed: _backToMovies,
+        onPressed: (){},
       ),
       actions: [
         IconButton(
           icon: SvgPicture.asset(AppIcons.star),
-          tooltip: 'Comment Icon',
+          tooltip: 'Like',
           onPressed: () {},
         ),
       ],
       expandedHeight: 280,
-      flexibleSpace: Stack(
-        children: <Widget>[
-          Positioned.fill(
-              child: Image.asset(
-            "assets/images/image.jpg",
-            fit: BoxFit.cover,
-          ))
-        ],
-      ),
+      flexibleSpace: backdropPath != null
+          ? Image.network(ApiClient.imageUrl(backdropPath), fit: BoxFit.cover)
+          : const SizedBox.shrink(),
+    );
+  }
+}
+
+class _BodyWidget extends StatelessWidget {
+  const _BodyWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final model = NotifierProvider.watch<MovieDetailsModel>(context);
+    final movieDetails = model?.movieDetails;
+    if (movieDetails == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    return CustomScrollView(
+      slivers: [
+        const _SliverAppBarWidget(),
+        SliverList(
+          delegate: SliverChildListDelegate(
+            [
+              const MovieDetailsMainInfoWidget(),
+              const MovieDetailsScreenCastWidget(),
+              ElevatedButton(onPressed: (){}, child: const Text('Trailer'))
+            ],
+          ),
+        )
+      ],
     );
   }
 }
