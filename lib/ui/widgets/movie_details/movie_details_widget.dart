@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:themoviedb/domain/api_client/api_client.dart';
 import 'package:themoviedb/library/widgets/inherited/provider.dart';
+import 'package:themoviedb/ui/navigation/main_navigation.dart';
 
 import 'package:themoviedb/ui/widgets/movie_details/movie_details_main_info_widget.dart';
 import 'package:themoviedb/ui/widgets/movie_details/movie_details_screen_cast_widget.dart';
@@ -109,7 +110,7 @@ class _SliverAppBarWidget extends StatelessWidget {
       leading: IconButton(
         icon: SvgPicture.asset(AppIcons.arrowLeft),
         tooltip: 'Back',
-        onPressed: (){},
+        onPressed: () {},
       ),
       actions: [
         IconButton(
@@ -133,6 +134,10 @@ class _BodyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final model = NotifierProvider.watch<MovieDetailsModel>(context);
     final movieDetails = model?.movieDetails;
+    final videos = movieDetails?.videos.results
+        .where((video) => video.type == 'Trailer' && video.site == 'YouTube');
+    final trailerKey = videos?.isNotEmpty == true ? videos?.first.key : null;
+
     if (movieDetails == null) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -144,7 +149,15 @@ class _BodyWidget extends StatelessWidget {
             [
               const MovieDetailsMainInfoWidget(),
               const MovieDetailsScreenCastWidget(),
-              ElevatedButton(onPressed: (){}, child: const Text('Trailer'))
+              trailerKey != null
+                  ? ElevatedButton(
+                      onPressed: () => Navigator.of(context).pushNamed(
+                        MainNavigationRouteNames.movieTrailerScreen,
+                        arguments: trailerKey,
+                      ),
+                      child: const Text('Trailer'),
+                    )
+                  : const SizedBox.shrink()
             ],
           ),
         )

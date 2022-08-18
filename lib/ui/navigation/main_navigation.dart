@@ -7,6 +7,7 @@ import 'package:themoviedb/ui/widgets/main_screen_widget/main_screen_widget.dart
 import 'package:themoviedb/ui/widgets/movie_details/movie_details_model.dart';
 import 'package:themoviedb/ui/widgets/movie_details/movie_details_widget.dart';
 import 'package:themoviedb/ui/widgets/movie_list/movie_list_model.dart';
+import 'package:themoviedb/ui/widgets/movie_trailer/movie_trailer.dart';
 import 'package:themoviedb/ui/widgets/sign_up/sign_up_model.dart';
 import 'package:themoviedb/ui/widgets/sign_up/sign_up_widget.dart';
 import 'package:themoviedb/ui/widgets/welcome/welcome_model.dart';
@@ -19,6 +20,7 @@ abstract class MainNavigationRouteNames {
   static const signUpScreen = 'sign_up';
   static const mainScreen = '/';
   static const movieDetailsScreen = '/movie_details';
+  static const movieTrailerScreen = '/movie_details/trailer';
 }
 
 class MainNavigation {
@@ -47,6 +49,13 @@ class MainNavigation {
                 MovieDetailsModel(movieId: movieId)..setupLocale(context),
             child: const MovieDetailsWidget(),
           ),
+        );
+      case MainNavigationRouteNames.movieTrailerScreen:
+        final arguments = settings.arguments;
+        final youTubeKey = arguments is String ? arguments : '';
+        return MaterialPageRoute(
+          builder: (context) =>
+                MovieTrailerWidget(youTubeKey: youTubeKey),
         );
       default:
         const widget = Text("Navigation Error");
