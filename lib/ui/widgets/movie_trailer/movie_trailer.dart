@@ -38,14 +38,15 @@ class _MovieTrailerWidgetState extends State<MovieTrailerWidget> {
       player: player,
       builder: (context, player) {
         return Scaffold(
-            appBar: AppBar(
-              title: const Text(
-                'Trailer',
-              ),
+          appBar: AppBar(
+            title: const Text(
+              'Trailer',
             ),
-            body: Center(
-              child: player,
-            ));
+          ),
+          body: Center(
+            child: player,
+          ),
+        );
       },
     );
   }

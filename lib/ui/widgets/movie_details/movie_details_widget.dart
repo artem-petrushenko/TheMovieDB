@@ -114,9 +114,11 @@ class _SliverAppBarWidget extends StatelessWidget {
       ),
       actions: [
         IconButton(
-          icon: SvgPicture.asset(AppIcons.star),
+          icon: SvgPicture.asset(
+            model?.isFavorite == true ? AppIcons.star : AppIcons.series,
+          ),
           tooltip: 'Like',
-          onPressed: () {},
+          onPressed: () => model?.toggleFavorite(),
         ),
       ],
       expandedHeight: 280,

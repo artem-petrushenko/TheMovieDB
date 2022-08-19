@@ -12,6 +12,19 @@ class ApiClientException implements Exception {
   ApiClientException(this.type);
 }
 
+enum MediaType { Movie, TV }
+
+extension MediaTypeAsString on MediaType {
+  String asString() {
+    switch (this) {
+      case MediaType.Movie:
+        return 'movie';
+      case MediaType.TV:
+        return 'tv';
+    }
+  }
+}
+
 class ApiClient {
   final _client = HttpClient();
   static const _host = 'https://api.themoviedb.org/3';
@@ -79,13 +92,14 @@ class ApiClient {
       final response = await request.close();
       final dynamic json = (await response.jsonDecode());
       _validationResponse(response, json);
+
       final result = parser(json);
       return result;
     } on SocketException {
       throw ApiClientException(ApiClientExceptionType.network);
     } on ApiClientException {
       rethrow;
-    } catch (_) {
+    } catch (e) {
       throw ApiClientException(ApiClientExceptionType.other);
     }
   }
@@ -100,6 +114,26 @@ class ApiClient {
       '/authentication/token/new',
       parser,
       <String, dynamic>{'api_key': _apiKey},
+    );
+    return result;
+  }
+
+  Future<int> getAccountInfo(
+    String sessionId,
+  ) async {
+    final parser = (dynamic json) {
+      final jsonMap = json as Map<String, dynamic>;
+      final result = jsonMap['id'] as int;
+      return result;
+    };
+
+    final result = _get(
+      '/account',
+      parser,
+      <String, dynamic>{
+        'api_key': _apiKey,
+        'session_id': sessionId,
+      },
     );
     return result;
   }
@@ -130,9 +164,9 @@ class ApiClient {
   }
 
   Future<MovieDetails> movieDetails(
-      int movieId,
-      String locale,
-      ) async {
+    int movieId,
+    String locale,
+  ) async {
     final parser = (dynamic json) {
       final jsonMap = json as Map<String, dynamic>;
       final response = MovieDetails.fromJson(jsonMap);
@@ -146,6 +180,27 @@ class ApiClient {
         'append_to_response': 'credits,videos',
         'api_key': _apiKey,
         'language': locale,
+      },
+    );
+    return result;
+  }
+
+  Future<bool> isFavorite(
+    int movieId,
+    String sessionId,
+  ) async {
+    final parser = (dynamic json) {
+      final jsonMap = json as Map<String, dynamic>;
+      final result = jsonMap['favorite'] as bool;
+      return result;
+    };
+
+    final result = _get(
+      '/movie/$movieId/account_states',
+      parser,
+      <String, dynamic>{
+        'api_key': _apiKey,
+        'session_id': sessionId,
       },
     );
     return result;
@@ -165,6 +220,33 @@ class ApiClient {
         'api_key': _apiKey,
         'page': page.toString(),
         'language': locale,
+      },
+    );
+    return result;
+  }
+
+  Future<int> markAsFavorite({
+    required int accountId,
+    required String sessionId,
+    required MediaType mediaType,
+    required int mediaId,
+    required bool isFavorite,
+  }) async {
+    final parser = (dynamic json) {
+      return 1;
+    };
+    final parameters = <String, dynamic>{
+      'media_type': mediaType.asString(),
+      'media_id': mediaId,
+      'favorite': isFavorite,
+    };
+    final result = _post(
+      "/account/$accountId/favorite",
+      parameters,
+      parser,
+      <String, dynamic>{
+        'api_key': _apiKey,
+        'session_id': sessionId,
       },
     );
     return result;
