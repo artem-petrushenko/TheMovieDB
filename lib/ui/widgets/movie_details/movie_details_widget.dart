@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:themoviedb/domain/api_client/api_client.dart';
 import 'package:themoviedb/library/widgets/inherited/provider.dart';
 import 'package:themoviedb/ui/navigation/main_navigation.dart';
+import 'package:themoviedb/ui/widgets/app/my_app_model.dart';
 
 import 'package:themoviedb/ui/widgets/movie_details/movie_details_main_info_widget.dart';
 import 'package:themoviedb/ui/widgets/movie_details/movie_details_screen_cast_widget.dart';
@@ -21,8 +22,17 @@ class MovieDetailsWidget extends StatefulWidget {
 
 class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
   @override
+  void initState() {
+    super.initState();
+    final model = NotifierProvider.read<MovieDetailsModel>(context);
+    final appModel = Provider.read<MyAppModel>(context);
+    model?.onSessionExpired = () => appModel?.resetSession(context);
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
     NotifierProvider.read<MovieDetailsModel>(context)?.setupLocale(context);
   }
 
@@ -107,6 +117,8 @@ class _SliverAppBarWidget extends StatelessWidget {
     final backdropPath = model?.movieDetails?.backdropPath;
 
     return SliverAppBar(
+      stretch: true,
+      // TODO
       leading: IconButton(
         icon: SvgPicture.asset(AppIcons.arrowLeft),
         tooltip: 'Back',
