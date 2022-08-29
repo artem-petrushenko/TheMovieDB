@@ -1,13 +1,20 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:themoviedb/domain/api_client/api_client.dart';
+import 'package:themoviedb/domain/api_client/auth_api_client.dart';
+
 import 'package:themoviedb/domain/data_providers/session_data_provider.dart';
 import 'package:themoviedb/ui/navigation/main_navigation.dart';
 
+import 'package:themoviedb/domain/api_client/api_client_exception.dart';
+
+import 'package:themoviedb/domain/api_client/account_api_client.dart';
+
 class AuthModel extends ChangeNotifier {
   final _sessionDataProvider = SessionDataProvider();
-  final _apiClient = ApiClient();
+  final _authApiClient = AuthApiClient();
+  final _accountApiClient = AccountApiClient();
+
   final loginTextController = TextEditingController();
   final passwordTextController = TextEditingController();
 
@@ -48,11 +55,11 @@ class AuthModel extends ChangeNotifier {
     String? sessionId;
     int? accountId;
     try {
-      sessionId = await _apiClient.auth(
+      sessionId = await _authApiClient.auth(
         username: login,
         password: password,
       );
-      accountId = await _apiClient.getAccountInfo(sessionId);
+      accountId = await _accountApiClient.getAccountInfo(sessionId);
     } on ApiClientException catch (e) {
       switch (e.type) {
         case ApiClientExceptionType.network:

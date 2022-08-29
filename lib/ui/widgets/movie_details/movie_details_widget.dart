@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:themoviedb/domain/api_client/api_client.dart';
+
 import 'package:themoviedb/library/widgets/inherited/provider.dart';
 import 'package:themoviedb/ui/navigation/main_navigation.dart';
 import 'package:themoviedb/ui/widgets/app/my_app_model.dart';
@@ -12,6 +12,8 @@ import 'package:themoviedb/icons.dart';
 import 'package:themoviedb/ui/theme/app_colors.dart';
 
 import 'package:themoviedb/ui/widgets/movie_details/movie_details_model.dart';
+
+import 'package:themoviedb/domain/api_client/image_downloader.dart';
 
 class MovieDetailsWidget extends StatefulWidget {
   const MovieDetailsWidget({Key? key}) : super(key: key);
@@ -135,7 +137,7 @@ class _SliverAppBarWidget extends StatelessWidget {
       ],
       expandedHeight: 280,
       flexibleSpace: backdropPath != null
-          ? Image.network(ApiClient.imageUrl(backdropPath), fit: BoxFit.cover)
+          ? Image.network(ImageDownloader.imageUrl(backdropPath), fit: BoxFit.cover)
           : const SizedBox.shrink(),
     );
   }

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:themoviedb/ui/widgets/movie_details/movie_details_model.dart';
-
-import 'package:themoviedb/domain/api_client/api_client.dart';
 import 'package:themoviedb/library/widgets/inherited/provider.dart';
+import 'package:themoviedb/domain/api_client/image_downloader.dart';
 
 class MovieDetailsScreenCastWidget extends StatelessWidget {
   const MovieDetailsScreenCastWidget({Key? key}) : super(key: key);
@@ -69,7 +68,7 @@ class _ActorListItemWidget extends StatelessWidget {
 
     return Column(
       children: [
-         ClipRRect(
+        ClipRRect(
           borderRadius: const BorderRadius.all(Radius.circular(50)),
           clipBehavior: Clip.hardEdge,
           child: actorPath != null
@@ -77,7 +76,8 @@ class _ActorListItemWidget extends StatelessWidget {
                   width: 79,
                   height: 79,
                   fit: BoxFit.cover,
-                  ApiClient.imageUrl(actorPath),)
+                  ImageDownloader.imageUrl(actorPath),
+                )
               : const SizedBox.shrink(),
         ),
         SizedBox(
