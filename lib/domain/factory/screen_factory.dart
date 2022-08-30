@@ -8,13 +8,17 @@ import 'package:themoviedb/ui/widgets/loader/loader_view_model.dart';
 import 'package:themoviedb/ui/widgets/loader/loader_widget.dart';
 import 'package:themoviedb/ui/widgets/auth/auth_model.dart';
 import 'package:themoviedb/ui/widgets/auth/auth_widget.dart';
-import 'package:themoviedb/ui/widgets/main_screen_widget/main_screen_model.dart';
-import 'package:themoviedb/ui/widgets/main_screen_widget/main_screen_widget.dart';
+import 'package:themoviedb/ui/widgets/movie_list/movie_list_model.dart';
+import 'package:themoviedb/ui/widgets/movie_list/movie_list_widget.dart';
 import 'package:themoviedb/ui/widgets/movie_trailer/movie_trailer.dart';
+import 'package:themoviedb/ui/widgets/news_list/news_list_widget.dart';
 import 'package:themoviedb/ui/widgets/sign_up/sign_up_model.dart';
 import 'package:themoviedb/ui/widgets/sign_up/sign_up_widget.dart';
 import 'package:themoviedb/ui/widgets/movie_details/movie_details_model.dart';
 import 'package:themoviedb/ui/widgets/movie_details/movie_details_widget.dart';
+
+import 'package:themoviedb/ui/widgets/main_screen/main_screen_widget.dart';
+import 'package:themoviedb/ui/widgets/tv_shows_list/tv_shows_list_widget.dart';
 
 class ScreenFactory {
   Widget makeLoader() {
@@ -40,10 +44,7 @@ class ScreenFactory {
   }
 
   Widget makeMain() {
-    return old_provider.NotifierProvider(
-      create: () => MainScreenModel(),
-      child: const MainScreenWidget(),
-    );
+    return const MainScreenWidget();
   }
 
   Widget makeMovieDetails(int movieId) {
@@ -55,5 +56,20 @@ class ScreenFactory {
 
   Widget makeMovieTrailer(String youTubeKey) {
     return MovieTrailerWidget(youTubeKey: youTubeKey);
+  }
+
+  Widget makeNewsList() {
+    return const NewsListWidget();
+  }
+
+  Widget makeMoviesList() {
+    return ChangeNotifierProvider(
+      create: (_) => MovieListViewModel(),
+      child: const MovieListWidget(),
+    );
+  }
+
+  Widget makeTVShowsList() {
+    return const TVShowsListWidget();
   }
 }
