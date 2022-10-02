@@ -19,6 +19,7 @@ class AuthService {
       password: password,
     );
     final accountId = await _accountApiClient.getAccountInfo(sessionId);
+
     await _sessionDataProvider.setSessionId(sessionId);
     await _sessionDataProvider.setAccountId(accountId);
   }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 import 'package:themoviedb/icons.dart';
-import 'package:themoviedb/library/widgets/inherited/provider.dart';
 import 'package:themoviedb/ui/theme/app_colors.dart';
 import 'package:themoviedb/ui/widgets/auth/auth_model.dart';
 
@@ -11,7 +11,7 @@ class AuthWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.read<AuthModel>(context);
+    final model = context.read<AuthViewModel>();
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 64.0,
@@ -42,30 +42,26 @@ class AuthWidget extends StatelessWidget {
               const SizedBox(height: 42.0),
               Row(
                 children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: model?.authWithApple,
-                      child: Center(
-                        child: SvgPicture.asset(
-                          AppIcons.apple,
-                          height: 19.5,
-                          width: 19.5,
-                          color: AppColors.kIconColor,
-                        ),
+                  ElevatedButton(
+                    onPressed: null,
+                    child: Center(
+                      child: SvgPicture.asset(
+                        AppIcons.apple,
+                        height: 19.5,
+                        width: 19.5,
+                        color: AppColors.kIconColor,
                       ),
                     ),
                   ),
                   const SizedBox(width: 14),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: model?.authWithGoogle,
-                      child: Center(
-                        child: SvgPicture.asset(
-                          AppIcons.google,
-                          height: 19.5,
-                          width: 19.5,
-                          color: AppColors.kIconColor,
-                        ),
+                  ElevatedButton(
+                    onPressed: null,
+                    child: Center(
+                      child: SvgPicture.asset(
+                        AppIcons.google,
+                        height: 19.5,
+                        width: 19.5,
+                        color: AppColors.kIconColor,
                       ),
                     ),
                   ),
@@ -80,7 +76,7 @@ class AuthWidget extends StatelessWidget {
                   textCapitalization: TextCapitalization.none,
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
-                  controller: model?.loginTextController,
+                  controller: model.loginTextController,
                   decoration: InputDecoration(
                       hintText: 'Enter your email',
                       hintStyle: Theme.of(context).textTheme.overline),
@@ -93,8 +89,8 @@ class AuthWidget extends StatelessWidget {
                   enableSuggestions: false,
                   textCapitalization: TextCapitalization.none,
                   textInputAction: TextInputAction.next,
-                  controller: model?.passwordTextController,
-                  obscureText: model?.isObscure == true ? true : false,
+                  controller: model.passwordTextController,
+                  obscureText: model.isObscure == true ? true : false,
                   decoration: InputDecoration(
                       // suffixIcon: IconButton(
                       //   splashRadius: 24.0,
@@ -143,8 +139,8 @@ class AuthWidget extends StatelessWidget {
                       ),
                       TextButton(
                         style: TextButton.styleFrom(
+                          foregroundColor: AppColors.kTextColor,
                           padding: EdgeInsets.zero,
-                          primary: AppColors.kTextColor,
                         ),
                         onPressed: () {},
                         child: const Text(
@@ -169,16 +165,13 @@ class AuthWidget extends StatelessWidget {
 }
 
 class _AuthButtonWidget extends StatelessWidget {
-  const _AuthButtonWidget({
-    Key? key,
-  }) : super(key: key);
+  const _AuthButtonWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.watch<AuthModel>(context);
-    final onPressed =
-        model?.canStartAuth == true ? () => model?.auth(context) : null;
-    final child = model?.isAuthProgress == true
+    final model = context.watch<AuthViewModel>();
+    final onPressed = model.canStartAuth ? () => model.auth(context) : null;
+    final child = model.isAuthProgress == true
         ? const SizedBox(
             width: 20.0,
             height: 20.0,
@@ -218,7 +211,7 @@ class _ErrorMessageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final errorMessage =
-        NotifierProvider.watch<AuthModel>(context)?.errorMessage;
+        context.select((AuthViewModel model) => model.errorMessage);
     if (errorMessage == null) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.only(top: 16.0),

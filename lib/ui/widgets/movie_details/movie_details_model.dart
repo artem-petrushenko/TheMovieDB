@@ -5,7 +5,6 @@ import 'package:themoviedb/domain/api_client/movie_api_client.dart';
 import 'package:themoviedb/domain/data_providers/session_data_provider.dart';
 import 'package:themoviedb/domain/entity/movie_details.dart';
 import 'package:themoviedb/domain/api_client/api_client_exception.dart';
-
 import 'package:themoviedb/domain/api_client/account_api_client.dart';
 
 class MovieDetailsModel extends ChangeNotifier {

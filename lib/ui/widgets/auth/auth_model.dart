@@ -1,91 +1,82 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:themoviedb/domain/api_client/auth_api_client.dart';
 
-import 'package:themoviedb/domain/data_providers/session_data_provider.dart';
+import 'package:themoviedb/domain/services/auth_service.dart';
+import 'package:themoviedb/domain/api_client/api_client_exception.dart';
 import 'package:themoviedb/ui/navigation/main_navigation.dart';
 
-import 'package:themoviedb/domain/api_client/api_client_exception.dart';
-
-import 'package:themoviedb/domain/api_client/account_api_client.dart';
-
-class AuthModel extends ChangeNotifier {
-  final _sessionDataProvider = SessionDataProvider();
-  final _authApiClient = AuthApiClient();
-  final _accountApiClient = AccountApiClient();
+class AuthViewModel extends ChangeNotifier {
+  final _authServices = AuthService();
 
   final loginTextController = TextEditingController();
   final passwordTextController = TextEditingController();
 
   String? _errorMessage;
-  bool _isObscure = true;
-  bool _isAuthProgress = false;
 
   String? get errorMessage => _errorMessage;
 
-  bool get isObscure => _isObscure;
+  bool _isAuthProgress = false;
 
   bool get canStartAuth => !_isAuthProgress;
 
   bool get isAuthProgress => _isAuthProgress;
+
+  bool _isValid(String login, String password) =>
+      login.isNotEmpty || password.isNotEmpty;
+
+  Future<String?> _login(String login, String password) async {
+    try {
+      await _authServices.login(login, password);
+    } on ApiClientException catch (e) {
+      switch (e.type) {
+        case ApiClientExceptionType.network:
+          return 'Server is not available';
+        case ApiClientExceptionType.auth:
+          return 'Incorrect login or password';
+        case ApiClientExceptionType.sessionExpired:
+        case ApiClientExceptionType.other:
+          return 'An error has occurred. Try again';
+      }
+    } catch (e) {
+      _errorMessage = 'Error. Try Again!';
+    }
+    return null;
+  }
+
+  bool _isObscure = true;
+
+  bool get isObscure => _isObscure;
 
   void toggle() {
     _isObscure = !_isObscure;
     // notifyListeners();
   }
 
-  void createAccount() {}
-
-  Future<void> authWithGoogle() async {}
-
-  Future<void> authWithApple() async {}
-
   Future<void> auth(BuildContext context) async {
     final login = loginTextController.text;
     final password = passwordTextController.text;
-    if (login.isEmpty || password.isEmpty) {
-      _errorMessage = 'Enter password and email';
-      notifyListeners();
+
+    if (!_isValid(login, password)) {
+      _updateState('Enter email or password', false);
       return;
     }
-    _errorMessage = null;
-    _isAuthProgress = true;
+
+    _updateState(null, true);
+
+    _errorMessage = await _login(login, password);
+    if (_errorMessage == null) {
+      MainNavigation.resetNavigation(context);
+    } else {
+      _updateState(_errorMessage, false);
+    }
+  }
+
+  void _updateState(String? errorMessage, bool isAuthProgress) {
+    if (_errorMessage == errorMessage && _isAuthProgress == isAuthProgress) {
+      return;
+    }
+    _errorMessage = errorMessage;
+    _isAuthProgress = isAuthProgress;
     notifyListeners();
-    String? sessionId;
-    int? accountId;
-    try {
-      sessionId = await _authApiClient.auth(
-        username: login,
-        password: password,
-      );
-      accountId = await _accountApiClient.getAccountInfo(sessionId);
-    } on ApiClientException catch (e) {
-      switch (e.type) {
-        case ApiClientExceptionType.network:
-          _errorMessage = 'Server is not available';
-          break;
-        case ApiClientExceptionType.auth:
-          _errorMessage = 'Incorrect login or password';
-          break;
-        case ApiClientExceptionType.other:
-          _errorMessage = 'An error has occurred. Try again';
-          break;
-      }
-    }
-    _isAuthProgress = false;
-    if (_errorMessage != null) {
-      notifyListeners();
-      return;
-    }
-    if (sessionId == null || accountId == null) {
-      _errorMessage = 'Error Session';
-      notifyListeners();
-      return;
-    }
-    await _sessionDataProvider.setSessionId(sessionId);
-    await _sessionDataProvider.setAccountId(accountId);
-    unawaited(Navigator.of(context)
-        .pushReplacementNamed(MainNavigationRouteNames.mainScreen));
   }
 }

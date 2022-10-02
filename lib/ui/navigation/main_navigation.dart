@@ -15,7 +15,6 @@ class MainNavigation {
   final routes = <String, Widget Function(BuildContext)>{
     MainNavigationRouteNames.loaderScreen: (_) => _screenFactory.makeLoader(),
     MainNavigationRouteNames.authScreen: (_) => _screenFactory.makeAuth(),
-    MainNavigationRouteNames.signUpScreen: (_) => _screenFactory.makeSignUp(),
     MainNavigationRouteNames.mainScreen: (_) => _screenFactory.makeMain(),
   };
 
@@ -37,5 +36,12 @@ class MainNavigation {
         const widget = Text("Navigation Error");
         return MaterialPageRoute(builder: (_) => widget);
     }
+  }
+
+  static void resetNavigation(BuildContext context){
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      MainNavigationRouteNames.loaderScreen,
+          (route) => false,
+    );
   }
 }

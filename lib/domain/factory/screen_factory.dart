@@ -12,8 +12,6 @@ import 'package:themoviedb/ui/widgets/movie_list/movie_list_model.dart';
 import 'package:themoviedb/ui/widgets/movie_list/movie_list_widget.dart';
 import 'package:themoviedb/ui/widgets/movie_trailer/movie_trailer.dart';
 import 'package:themoviedb/ui/widgets/news_list/news_list_widget.dart';
-import 'package:themoviedb/ui/widgets/sign_up/sign_up_model.dart';
-import 'package:themoviedb/ui/widgets/sign_up/sign_up_widget.dart';
 import 'package:themoviedb/ui/widgets/movie_details/movie_details_model.dart';
 import 'package:themoviedb/ui/widgets/movie_details/movie_details_widget.dart';
 
@@ -30,16 +28,9 @@ class ScreenFactory {
   }
 
   Widget makeAuth() {
-    return old_provider.NotifierProvider(
-      create: () => AuthModel(),
+    return ChangeNotifierProvider(
+      create: (_) => AuthViewModel(),
       child: const AuthWidget(),
-    );
-  }
-
-  Widget makeSignUp() {
-    return old_provider.NotifierProvider(
-      create: () => SignUpModel(),
-      child: const SignUpWidget(),
     );
   }
 
