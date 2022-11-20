@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:themoviedb/domain/data_providers/session_data_provider.dart';
+import 'package:themoviedb/domain/services/auth_service.dart';
 
 class TVShowsListWidget extends StatelessWidget {
   const TVShowsListWidget({Key? key}) : super(key: key);
@@ -9,7 +9,7 @@ class TVShowsListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: ElevatedButton(
-        onPressed: () => SessionDataProvider().setSessionId(null),
+        onPressed: () => AuthService().logout(),
         child: const Text('Log Out'),
       ),
     );

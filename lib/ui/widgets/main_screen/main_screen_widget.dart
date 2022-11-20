@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:themoviedb/domain/factory/screen_factory.dart';
-import 'package:themoviedb/ui/theme/app_colors.dart';
 
 class MainScreenWidget extends StatefulWidget {
   const MainScreenWidget({Key? key}) : super(key: key);
@@ -35,21 +34,6 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) => _onItemTapped(index),
-        backgroundColor: AppColors.kBackgroundColor,
-        unselectedItemColor: AppColors.kSupportTextColor,
-        selectedItemColor: AppColors.kIconColor,
-        selectedIconTheme: const IconThemeData(
-          size: 24,
-        ),
-        unselectedIconTheme: const IconThemeData(
-          size: 24,
-        ),
-        selectedLabelStyle: const TextStyle(
-          fontSize: 12,
-        ),
-        unselectedLabelStyle: const TextStyle(
-          fontSize: 12,
-        ),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_rounded),

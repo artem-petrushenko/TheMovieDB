@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:themoviedb/ui/theme/app_colors.dart';
 import 'package:themoviedb/ui/widgets/movie_list/movie_list_model.dart';
 
 import 'package:themoviedb/domain/api_client/image_downloader.dart';
@@ -45,14 +44,14 @@ class _SearchWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: TextFormField(
         onChanged: model.searchMovie,
-        decoration: InputDecoration(
-            focusedBorder: const OutlineInputBorder(
+        decoration: const InputDecoration(
+            focusedBorder: OutlineInputBorder(
               borderSide: BorderSide.none,
               borderRadius: BorderRadius.all(
                 Radius.circular(11.0),
               ),
             ),
-            border: const OutlineInputBorder(
+            border: OutlineInputBorder(
               borderRadius: BorderRadius.all(
                 Radius.circular(11.0),
               ),
@@ -61,18 +60,8 @@ class _SearchWidget extends StatelessWidget {
                 width: 0,
               ),
             ),
-            prefixIcon: const Icon(
-              Icons.filter_list_rounded,
-              color: AppColors.kTextColor,
-            ),
-            suffixIcon: IconButton(
-              splashRadius: 24,
-              color: AppColors.kIconColor,
-              icon: const Icon(Icons.mic_rounded),
-              onPressed: () {},
-            ),
             hintText: 'Search in the App',
-            hintStyle: Theme.of(context).textTheme.bodyText2),
+        ),
       ),
     );
   }
@@ -119,7 +108,6 @@ class _MovieListRowWidget extends StatelessWidget {
               width: double.infinity,
               height: 120,
               decoration: const BoxDecoration(
-                color: AppColors.kBackgroundWidgetsColor,
                 borderRadius: BorderRadius.all(
                   Radius.circular(12),
                 ),
@@ -130,6 +118,7 @@ class _MovieListRowWidget extends StatelessWidget {
                     Image.network(
                       ImageDownloader.imageUrl(posterPath),
                       width: 95,
+                      fit: BoxFit.cover,
                     ),
                   Expanded(
                     child: Padding(

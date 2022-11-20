@@ -48,7 +48,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   json_serializable:
-  build_runner: 
+  build_runner:
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -85,17 +85,19 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Roboto
+    - family: ProximaNova
       fonts:
-        - asset: assets/fonts/Roboto-Black.ttf
+        - asset: assets/fonts/ProximaNova-Black.ttf
           weight: 900
-        - asset: assets/fonts/Roboto-Bold.ttf
+        - asset: assets/fonts/ProximaNova-Bold.ttf
           weight: 700
-        - asset: assets/fonts/Roboto-Medium.ttf
+        - asset: assets/fonts/ProximaNova-Semibold.ttf
+          weight: 600
+        - asset: assets/fonts/ProximaNova-Semibold.ttf
           weight: 500
-        - asset: assets/fonts/Roboto-Regular.ttf
+        - asset: assets/fonts/ProximaNova-Regular.ttf
           weight: 400
-        - asset: assets/fonts/Roboto-Light.ttf
+        - asset: assets/fonts/ProximaNova-Light.ttf
           weight: 300
 
   #

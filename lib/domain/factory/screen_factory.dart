@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:themoviedb/library/widgets/inherited/provider.dart'
-    as old_provider;
-
-import 'package:themoviedb/ui/widgets/loader/loader_view_model.dart';
+import 'package:themoviedb/ui/widgets/loader/loader_model.dart';
 import 'package:themoviedb/ui/widgets/loader/loader_widget.dart';
+
 import 'package:themoviedb/ui/widgets/auth/auth_model.dart';
-import 'package:themoviedb/ui/widgets/auth/auth_widget.dart';
+import 'package:themoviedb/ui/widgets/auth/auth_screen.dart';
+
 import 'package:themoviedb/ui/widgets/movie_list/movie_list_model.dart';
 import 'package:themoviedb/ui/widgets/movie_list/movie_list_widget.dart';
+
 import 'package:themoviedb/ui/widgets/movie_trailer/movie_trailer.dart';
+
 import 'package:themoviedb/ui/widgets/news_list/news_list_widget.dart';
+
 import 'package:themoviedb/ui/widgets/movie_details/movie_details_model.dart';
-import 'package:themoviedb/ui/widgets/movie_details/movie_details_widget.dart';
+import 'package:themoviedb/ui/widgets/movie_details/movie_details_screen.dart';
 
 import 'package:themoviedb/ui/widgets/main_screen/main_screen_widget.dart';
+
 import 'package:themoviedb/ui/widgets/tv_shows_list/tv_shows_list_widget.dart';
 
 class ScreenFactory {
@@ -30,7 +33,7 @@ class ScreenFactory {
   Widget makeAuth() {
     return ChangeNotifierProvider(
       create: (_) => AuthViewModel(),
-      child: const AuthWidget(),
+      child: const AuthScreen(),
     );
   }
 
@@ -39,9 +42,9 @@ class ScreenFactory {
   }
 
   Widget makeMovieDetails(int movieId) {
-    return old_provider.NotifierProvider(
-      create: () => MovieDetailsModel(movieId: movieId),
-      child: const MovieDetailsWidget(),
+    return ChangeNotifierProvider(
+      create: (_) => MovieDetailsViewModel(movieId: movieId),
+      child: const MovieDetailsScreen(),
     );
   }
 
