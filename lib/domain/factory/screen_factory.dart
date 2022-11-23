@@ -1,32 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:themoviedb/ui/widgets/loader/loader_model.dart';
-import 'package:themoviedb/ui/widgets/loader/loader_widget.dart';
+import 'package:themoviedb/ui/screens/loader/loader_model.dart';
+import 'package:themoviedb/ui/screens/loader/loader_screen.dart';
 
-import 'package:themoviedb/ui/widgets/auth/auth_model.dart';
-import 'package:themoviedb/ui/widgets/auth/auth_screen.dart';
+import 'package:themoviedb/ui/screens/auth/auth_model.dart';
+import 'package:themoviedb/ui/screens/auth/auth_screen.dart';
 
-import 'package:themoviedb/ui/widgets/movie_list/movie_list_model.dart';
-import 'package:themoviedb/ui/widgets/movie_list/movie_list_widget.dart';
+import 'package:themoviedb/ui/screens/movie_list/movie_list_model.dart';
+import 'package:themoviedb/ui/screens/movie_list/movie_list_screen.dart';
+import 'package:themoviedb/ui/screens/movie_trailer/movie_trailer_model.dart';
 
-import 'package:themoviedb/ui/widgets/movie_trailer/movie_trailer.dart';
+import 'package:themoviedb/ui/screens/movie_trailer/movie_trailer_screen.dart';
 
-import 'package:themoviedb/ui/widgets/news_list/news_list_widget.dart';
+import 'package:themoviedb/ui/screens/news_list/news_list_widget.dart';
 
-import 'package:themoviedb/ui/widgets/movie_details/movie_details_model.dart';
-import 'package:themoviedb/ui/widgets/movie_details/movie_details_screen.dart';
+import 'package:themoviedb/ui/screens/movie_details/movie_details_model.dart';
+import 'package:themoviedb/ui/screens/movie_details/movie_details_screen.dart';
 
-import 'package:themoviedb/ui/widgets/main_screen/main_screen_widget.dart';
+import 'package:themoviedb/ui/screens/main_screen/main_screen.dart';
 
-import 'package:themoviedb/ui/widgets/tv_shows_list/tv_shows_list_widget.dart';
+import 'package:themoviedb/ui/screens/tv_shows_list/tv_shows_list_widget.dart';
+
+import 'package:themoviedb/ui/screens/user/user_screen.dart';
+import 'package:themoviedb/ui/screens/user/user_model.dart';
 
 class ScreenFactory {
   Widget makeLoader() {
     return Provider(
       create: (context) => LoaderViewModel(context),
       lazy: false,
-      child: const LoaderWidget(),
+      child: const LoaderScreen(),
     );
   }
 
@@ -49,7 +53,10 @@ class ScreenFactory {
   }
 
   Widget makeMovieTrailer(String youTubeKey) {
-    return MovieTrailerWidget(youTubeKey: youTubeKey);
+    return ChangeNotifierProvider(
+      create: (_) => MovieTrailerViewModel(youTubeKey: youTubeKey),
+      child: const MovieTrailerScreen(),
+    );
   }
 
   Widget makeNewsList() {
@@ -59,11 +66,18 @@ class ScreenFactory {
   Widget makeMoviesList() {
     return ChangeNotifierProvider(
       create: (_) => MovieListViewModel(),
-      child: const MovieListWidget(),
+      child: const MovieListScreen(),
     );
   }
 
   Widget makeTVShowsList() {
     return const TVShowsListWidget();
+  }
+
+  Widget makeUser() {
+    return ChangeNotifierProvider(
+      create: (_) => UserViewModel(),
+      child: const UserScreen(),
+    );
   }
 }
