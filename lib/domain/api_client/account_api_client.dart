@@ -65,7 +65,7 @@ class AccountApiClient {
     return result;
   }
 
-  Future<int> addToWatchlist({
+  Future<int> markAsWatchlist({
     required int accountId,
     required String sessionId,
     required MediaType mediaType,

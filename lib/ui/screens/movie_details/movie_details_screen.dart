@@ -18,8 +18,10 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    final locale = Localizations.localeOf(context);
     Future.microtask(
-        () => context.read<MovieDetailsViewModel>().setupLocale(context));
+      () => context.read<MovieDetailsViewModel>().setupLocale(context, locale),
+    );
   }
 
   @override

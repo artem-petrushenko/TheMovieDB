@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:themoviedb/domain/api_client/movie_api_client.dart';
 import 'package:themoviedb/domain/api_client/api_client_exception.dart';
-import 'package:themoviedb/domain/api_client/account_api_client.dart';
-import 'package:themoviedb/domain/data_providers/session_data_provider.dart';
 import 'package:themoviedb/domain/entity/movie_details.dart';
 import 'package:themoviedb/domain/services/auth_service.dart';
+import 'package:themoviedb/domain/services/movie_service.dart';
 import 'package:themoviedb/ui/navigation/main_navigation.dart';
+import 'package:themoviedb/library/localized_model.dart';
 
 class MovieDetailsPosterData {
   final String voteAverage;
@@ -131,43 +130,20 @@ class MovieDetailsData {
 
 class MovieDetailsViewModel extends ChangeNotifier {
   final _authService = AuthService();
-  final _sessionDataProvider = SessionDataProvider();
-  final _movieApiClient = MovieApiClient();
-  final _accountApiClient = AccountApiClient();
+  final _movieService = MovieService();
 
   final int movieId;
   final data = MovieDetailsData();
-  String _locale = '';
+  final _localizedStorage = LocalizedModelStorage();
   late DateFormat _dateFormat;
 
-  MovieDetailsViewModel({
-    required this.movieId,
-  });
+  MovieDetailsViewModel({required this.movieId});
 
-  Future<void> setupLocale(BuildContext context) async {
-    final locale = Localizations.localeOf(context).toLanguageTag();
-    if (_locale == locale) return;
-    _locale = locale;
-    _dateFormat = DateFormat.yMMMMd(locale);
+  Future<void> setupLocale(BuildContext context, Locale locale) async {
+    if (!_localizedStorage.updateLocale(locale)) return;
+    _dateFormat = DateFormat.yMMMMd(_localizedStorage.localeTag);
     updateData(null, false, false);
     await loadDetails(context);
-  }
-
-  Future<void> loadDetails(BuildContext context) async {
-    try {
-      final movieDetails = await _movieApiClient.movieDetails(movieId, _locale);
-      final sessionId = await _sessionDataProvider.getSessionId();
-
-      bool isFavorite = false;
-      bool isWatchlist = false;
-      if (sessionId != null) {
-        isFavorite = await _movieApiClient.isFavorite(movieId, sessionId);
-        isWatchlist = await _movieApiClient.isWatchlist(movieId, sessionId);
-      }
-      updateData(movieDetails, isFavorite, isWatchlist);
-    } on ApiClientException catch (e) {
-      _handleApiClientException(e, context);
-    }
   }
 
   void updateData(MovieDetails? details, bool isFavorite, bool isWatchlist) {
@@ -228,23 +204,31 @@ class MovieDetailsViewModel extends ChangeNotifier {
     return runtimeData;
   }
 
+  Future<void> loadDetails(BuildContext context) async {
+    try {
+      final details = await _movieService.loadDetails(
+        movieId: movieId,
+        locale: _localizedStorage.localeTag,
+      );
+      updateData(
+        details.details,
+        details.isFavorite,
+        details.isWatchlist,
+      );
+    } on ApiClientException catch (e) {
+      _handleApiClientException(e, context);
+    }
+  }
+
   Future<void> toggleFavorite(BuildContext context) async {
-    final sessionId = await _sessionDataProvider.getSessionId();
-    final accountId = await _sessionDataProvider.getAccountId();
-
-    if (sessionId == null || accountId == null) return;
-
     data.informationData = data.informationData
         .copyWith(isFavorite: !data.informationData.isFavorite);
 
     notifyListeners();
 
     try {
-      await _accountApiClient.markAsFavorite(
-        accountId: accountId,
-        sessionId: sessionId,
-        mediaType: MediaType.movie,
-        mediaId: movieId,
+      await _movieService.updateFavorite(
+        movieId: movieId,
         isFavorite: data.informationData.isFavorite,
       );
     } on ApiClientException catch (e) {
@@ -252,22 +236,14 @@ class MovieDetailsViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> addToWatchlist(BuildContext context) async {
-    final sessionId = await _sessionDataProvider.getSessionId();
-    final accountId = await _sessionDataProvider.getAccountId();
-
-    if (sessionId == null || accountId == null) return;
-
+  Future<void> toggleWatchlist(BuildContext context) async {
     data.posterData =
         data.posterData.copyWith(isWatchlist: !data.posterData.isWatchlist);
     notifyListeners();
 
     try {
-      await _accountApiClient.addToWatchlist(
-        accountId: accountId,
-        sessionId: sessionId,
-        mediaType: MediaType.movie,
-        mediaId: movieId,
+      await _movieService.updateWatchlist(
+        movieId: movieId,
         isWatchlist: data.posterData.isWatchlist,
       );
     } on ApiClientException catch (e) {

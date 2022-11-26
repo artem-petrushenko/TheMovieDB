@@ -16,18 +16,18 @@ class _MovieListWidgetState extends State<MovieListScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    context.read<MovieListViewModel>().setupLocale(context);
+    final locale = Localizations.localeOf(context);
+    context.read<MovieListViewModel>().setupLocale(locale);
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 8),
-      child: Column(
+      child: Stack(
         children: const [
+          _MovieListMoviesWidget(),
           _SearchWidget(),
-          _MovieListWidget(),
         ],
       ),
     );
@@ -40,121 +40,127 @@ class _SearchWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final model = context.read<MovieListViewModel>();
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.85),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black54,
+            offset: Offset(0, 5),
+            blurRadius: 10.0,
+          ),
+        ],
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(24.0),
+          topRight: Radius.circular(12.0),
+          bottomRight: Radius.circular(24.0),
+          bottomLeft: Radius.circular(12.0),
+        ),
+      ),
       child: TextFormField(
         onChanged: model.searchMovie,
         decoration: const InputDecoration(
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.all(
-                Radius.circular(11.0),
-              ),
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(11.0),
-              ),
-              borderSide: BorderSide(
-                color: Colors.transparent,
-                width: 0,
-              ),
-            ),
-            hintText: 'Search in the App',
+          errorBorder: InputBorder.none,
+          focusedErrorBorder: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          disabledBorder: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          border: InputBorder.none,
+          hintText: 'Search in the App',
         ),
       ),
     );
   }
 }
 
-class _MovieListWidget extends StatelessWidget {
-  const _MovieListWidget({Key? key}) : super(key: key);
+class _MovieListMoviesWidget extends StatelessWidget {
+  const _MovieListMoviesWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final model = context.watch<MovieListViewModel>();
-    return Expanded(
-      child: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 25),
-        shrinkWrap: true,
-        itemCount: model.movies.length,
-        separatorBuilder: (BuildContext context, int index) =>
-            const SizedBox(height: 22),
-        itemBuilder: (BuildContext context, int index) {
-          model.showedMovieAtIndex(index);
-          return _MovieListRowWidget(index: index);
-        },
+    return GridView.builder(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16.0,
       ),
+      shrinkWrap: true,
+      itemCount: model.movies.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        mainAxisExtent: 210,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 8,
+        crossAxisCount: 3,
+      ),
+      itemBuilder: (BuildContext context, int index) {
+        model.showedMovieAtIndex(index);
+        return _MovieListMovieWidget(index: index);
+      },
     );
   }
 }
 
-class _MovieListRowWidget extends StatelessWidget {
+class _MovieListMovieWidget extends StatelessWidget {
   final int index;
 
-  const _MovieListRowWidget({Key? key, required this.index}) : super(key: key);
+  const _MovieListMovieWidget({Key? key, required this.index})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final model = context.read<MovieListViewModel>();
     final movie = model.movies[index];
     final posterPath = movie.posterPath;
-    return Column(
-      children: [
-        Stack(
-          children: [
+    return GestureDetector(
+      onTap: () => model.onMovieTap(context, index),
+      child: Column(
+        children: [
+          if (posterPath != null)
             Container(
-              clipBehavior: Clip.hardEdge,
-              width: double.infinity,
-              height: 120,
               decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(12),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(24.0),
+                  topRight: Radius.circular(12.0),
+                  bottomRight: Radius.circular(24.0),
+                  bottomLeft: Radius.circular(12.0),
                 ),
-              ),
-              child: Row(
-                children: [
-                  if (posterPath != null)
-                    Image.network(
-                      ImageDownloader.imageUrl(posterPath),
-                      width: 95,
-                      fit: BoxFit.cover,
-                    ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(movie.title),
-                          Text(movie.releaseDate),
-                          Text(
-                            movie.overview,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0x2612153D),
+                    offset: Offset(0, 8),
+                    blurRadius: 8.0,
                   ),
                 ],
               ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              height: 120,
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  hoverColor: Colors.grey[400],
-                  borderRadius: BorderRadius.circular(12),
-                  onTap: () => model.onMovieTap(context, index),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(24.0),
+                  topRight: Radius.circular(12.0),
+                  bottomRight: Radius.circular(24.0),
+                  bottomLeft: Radius.circular(12.0),
+                ),
+                child: SizedBox(
+                  child: Image.network(
+                    ImageDownloader.imageUrl(posterPath),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
-          ],
-        )
-      ],
+          const SizedBox(height: 6.0),
+          Text(
+            movie.title,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 14.0,
+              fontWeight: FontWeight.w500,
+            ),
+          )
+        ],
+      ),
     );
   }
 }

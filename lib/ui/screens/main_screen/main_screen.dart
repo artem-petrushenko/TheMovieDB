@@ -33,10 +33,19 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        elevation: 0,
         showUnselectedLabels: false,
         showSelectedLabels: false,
         unselectedIconTheme: const IconThemeData(color: Colors.purple),
-        selectedIconTheme: const IconThemeData(color: Colors.purple),
+        selectedIconTheme:  IconThemeData(
+          color: Colors.purple,
+          shadows: [
+            BoxShadow(
+              color: Colors.purple.shade300,
+              blurRadius: 32.0,
+            ),
+          ],
+        ),
         currentIndex: _selectedIndex,
         onTap: (index) => _onItemTapped(index),
         items: const [

@@ -124,7 +124,7 @@ class _WatchlistWidget extends StatelessWidget {
         child: Material(
           color: const Color(0x4DFFFFFF),
           child: InkWell(
-            onTap: () => model.addToWatchlist(context),
+            onTap: () => model.toggleWatchlist(context),
             child: Icon(
               isWatchlistIcon,
               size: 24,
