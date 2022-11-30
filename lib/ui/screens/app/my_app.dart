@@ -13,8 +13,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'TMDB',
       theme: ThemeData(
-        fontFamily: 'ProximaNova',
-          primarySwatch: Colors.deepPurple,
+        brightness: Brightness.light,
+        fontFamily: 'SourceSansPro',
+        primarySwatch: Colors.indigo,
       ),
       debugShowCheckedModeBanner: false,
       localizationsDelegates: const [

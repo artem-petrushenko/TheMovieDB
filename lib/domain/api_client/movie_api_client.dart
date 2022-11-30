@@ -94,47 +94,5 @@ class MovieApiClient {
     );
     return result;
   }
-
-  // Future<bool> isFavorite(
-  //   int movieId,
-  //   String sessionId,
-  // ) async {
-  //   bool parser(dynamic json) {
-  //     final jsonMap = json as Map<String, dynamic>;
-  //     final result = jsonMap['favorite'] as bool;
-  //     return result;
-  //   }
-  //
-  //   final result = _networkClient.get(
-  //     '/movie/$movieId/account_states',
-  //     parser,
-  //     <String, dynamic>{
-  //       'api_key': Configuration.apiKey,
-  //       'session_id': sessionId,
-  //     },
-  //   );
-  //   return result;
-  // }
-  //
-  // Future<bool> isWatchlist(
-  //     int movieId,
-  //     String sessionId,
-  //     ) async {
-  //   bool parser(dynamic json) {
-  //     final jsonMap = json as Map<String, dynamic>;
-  //     final result = jsonMap['watchlist'] as bool;
-  //     return result;
-  //   }
-  //
-  //   final result = _networkClient.get(
-  //     '/movie/$movieId/account_states',
-  //     parser,
-  //     <String, dynamic>{
-  //       'api_key': Configuration.apiKey,
-  //       'session_id': sessionId,
-  //     },
-  //   );
-  //   return result;
-  // }
 }
 

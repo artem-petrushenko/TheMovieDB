@@ -8,6 +8,7 @@ abstract class MainNavigationRouteNames {
   static const mainScreen = '/main';
   static const movieDetailsScreen = '/main/movie_details';
   static const movieTrailerScreen = '/main/movie_details/trailer';
+  static const peopleDetailsScreen = '/main/movie_details/people_details';
 }
 
 class MainNavigation {
@@ -31,6 +32,12 @@ class MainNavigation {
         final youTubeKey = arguments is String ? arguments : '';
         return MaterialPageRoute(
           builder: (_) => _screenFactory.makeMovieTrailer(youTubeKey),
+        );
+      case MainNavigationRouteNames.peopleDetailsScreen:
+        final arguments = settings.arguments;
+        final peopleId = arguments is int ? arguments : 0;
+        return MaterialPageRoute(
+          builder: (_) => _screenFactory.makePeopleDetails(peopleId),
         );
       default:
         const widget = Text("Navigation Error");

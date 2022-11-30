@@ -72,45 +72,48 @@ class _ActorListItemWidget extends StatelessWidget {
     final actor = model.data.castData[actorIndex];
     final actorPath = actor.profilePath;
 
-    return SizedBox(
-      width: 72.0,
-      child: Column(
-        children: [
-          actorPath != null
-              ? ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(50)),
-                  clipBehavior: Clip.hardEdge,
-                  child: Image.network(
-                    width: 72,
-                    height: 72,
-                    fit: BoxFit.cover,
-                    ImageDownloader.imageUrl(actorPath),
-                  ),
-                )
-              : const SizedBox(height: 72, width: 72),
-          const SizedBox(height: 12.0),
-          Text(
-            actor.name,
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            style: const TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 14,
-              color: Color(0xFF12153D),
+    return InkWell(
+      onTap: () => model.openDetailsPerson(context, actor.id),
+      child: SizedBox(
+        width: 72.0,
+        child: Column(
+          children: [
+            actorPath != null
+                ? ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(50)),
+                    clipBehavior: Clip.hardEdge,
+                    child: Image.network(
+                      width: 72,
+                      height: 72,
+                      fit: BoxFit.cover,
+                      ImageDownloader.imageUrl(actorPath),
+                    ),
+                  )
+                : const SizedBox(height: 72, width: 72),
+            const SizedBox(height: 12.0),
+            Text(
+              actor.name,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              style: const TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
+                color: Color(0xFF12153D),
+              ),
             ),
-          ),
-          const SizedBox(height: 4.0),
-          Text(
-            actor.character,
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            style: const TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 14,
-              color: Color(0xFF9A9BB2),
+            const SizedBox(height: 4.0),
+            Text(
+              actor.character,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              style: const TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
+                color: Color(0xFF9A9BB2),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

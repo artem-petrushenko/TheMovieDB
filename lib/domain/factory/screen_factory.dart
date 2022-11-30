@@ -25,6 +25,9 @@ import 'package:themoviedb/ui/screens/tv_shows_list/tv_shows_list_widget.dart';
 import 'package:themoviedb/ui/screens/user/user_screen.dart';
 import 'package:themoviedb/ui/screens/user/user_model.dart';
 
+import 'package:themoviedb/ui/screens/people_details/person_details_screen.dart';
+import 'package:themoviedb/ui/screens/people_details/person_details_model.dart';
+
 class ScreenFactory {
   Widget makeLoader() {
     return Provider(
@@ -78,6 +81,13 @@ class ScreenFactory {
     return ChangeNotifierProvider(
       create: (_) => UserViewModel(),
       child: const UserScreen(),
+    );
+  }
+
+  Widget makePeopleDetails(int personId) {
+    return ChangeNotifierProvider(
+      create: (_) => PersonDetailsViewModel(personId: personId),
+      child: const PersonDetailsScreen(),
     );
   }
 }

@@ -149,13 +149,18 @@ class _YearWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final year = context.select(
         (MovieDetailsViewModel model) => model.data.informationData.year);
-    return Text(
-      year,
-      style: const TextStyle(
-        fontWeight: FontWeight.w400,
-        fontSize: 14.0,
-        color: Color(0xFF9A9BB2),
-      ),
+    return Column(
+      children: [
+        if (year != null)
+          Text(
+            year,
+            style: const TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 14.0,
+              color: Color(0xFF9A9BB2),
+            ),
+          ),
+      ],
     );
   }
 }
@@ -238,13 +243,14 @@ class _StoryLineWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
-        Text(
-          overview,
-          style: const TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: 14.0,
-              color: Color(0xFF737599)),
-        ),
+        if (overview != null)
+          Text(
+            overview,
+            style: const TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 14.0,
+                color: Color(0xFF737599)),
+          ),
       ],
     );
   }

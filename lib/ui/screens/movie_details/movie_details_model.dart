@@ -46,9 +46,9 @@ class MovieDetailsPosterData {
 
 class MovieDetailsInformationData {
   final String title;
-  final String overview;
+  final String? overview;
   final bool isFavorite;
-  final String year;
+  final String? year;
   final String runtimeData;
   final List<String> genres;
   final String ageRating;
@@ -61,7 +61,7 @@ class MovieDetailsInformationData {
     required this.genres,
     required this.title,
     required this.overview,
-    required this.year,
+    this.year,
     required this.runtimeData,
     required this.ageRating,
   });
@@ -98,6 +98,7 @@ class MovieDetailsRuntimeData {
 }
 
 class MovieDetailsActorData {
+  final int id;
   final String name;
   final String character;
   final String? profilePath;
@@ -105,6 +106,7 @@ class MovieDetailsActorData {
   MovieDetailsActorData({
     required this.name,
     required this.character,
+    required this.id,
     this.profilePath,
   });
 }
@@ -168,8 +170,8 @@ class MovieDetailsViewModel extends ChangeNotifier {
     data.informationData = MovieDetailsInformationData(
       isFavorite: isFavorite,
       title: details.title,
-      overview: details.overview ?? '',
-      year: details.releaseDate?.year.toString() ?? '',
+      overview: details.overview,
+      year: details.releaseDate?.year.toString(),
       runtimeData: makeRuntime(details),
       genres: makeGenres(details),
       ageRating: 'PG-13', //TODO
@@ -177,6 +179,7 @@ class MovieDetailsViewModel extends ChangeNotifier {
     data.castData = details.credits.cast
         .map(
           (e) => MovieDetailsActorData(
+            id: e.id,
             name: e.name,
             character: e.character,
             profilePath: e.profilePath,
@@ -265,5 +268,12 @@ class MovieDetailsViewModel extends ChangeNotifier {
 
   void backToMovies(BuildContext context) {
     Navigator.pop(context);
+  }
+
+  void openDetailsPerson(BuildContext context, int personId){
+    Navigator.of(context).pushNamed(
+      MainNavigationRouteNames.peopleDetailsScreen,
+      arguments: personId,
+    );
   }
 }

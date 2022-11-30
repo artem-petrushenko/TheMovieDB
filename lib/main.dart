@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:themoviedb/ui/screens/app/my_app.dart';
 
 void main()  {
-  //TODO
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
