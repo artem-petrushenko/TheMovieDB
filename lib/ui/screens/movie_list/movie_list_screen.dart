@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:themoviedb/ui/screens/movie_list/movie_list_model.dart';
-
 import 'package:themoviedb/domain/api_client/image_downloader.dart';
+import 'package:themoviedb/ui/screens/movie_list/movie_list_model.dart';
 
 class MovieListScreen extends StatefulWidget {
   const MovieListScreen({Key? key}) : super(key: key);
@@ -22,13 +21,18 @@ class _MovieListWidgetState extends State<MovieListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 8),
-      child: Stack(
-        children: const [
-          _MovieListMoviesWidget(),
-          _SearchWidget(),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+      ),
+      body: Padding(
+        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 8),
+        child: Stack(
+          children: const [
+            _MovieListMoviesWidget(),
+            _SearchWidget(),
+          ],
+        ),
       ),
     );
   }
@@ -81,18 +85,13 @@ class _MovieListMoviesWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final model = context.watch<MovieListViewModel>();
-    return GridView.builder(
+    return ListView.builder(
       padding: const EdgeInsets.symmetric(
         horizontal: 16.0,
       ),
+      itemExtent: 163,
       shrinkWrap: true,
       itemCount: model.movies.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        mainAxisExtent: 210,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 8,
-        crossAxisCount: 3,
-      ),
       itemBuilder: (BuildContext context, int index) {
         model.showedMovieAtIndex(index);
         return _MovieListMovieWidget(index: index);
@@ -114,53 +113,123 @@ class _MovieListMovieWidget extends StatelessWidget {
     final posterPath = movie.posterPath;
     return GestureDetector(
       onTap: () => model.onMovieTap(context, index),
-      child: Column(
-        children: [
-          if (posterPath != null)
-            Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(24.0),
-                  topRight: Radius.circular(12.0),
-                  bottomRight: Radius.circular(24.0),
-                  bottomLeft: Radius.circular(12.0),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0x2612153D),
-                    offset: Offset(0, 8),
-                    blurRadius: 8.0,
-                  ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(24.0),
-                  topRight: Radius.circular(12.0),
-                  bottomRight: Radius.circular(24.0),
-                  bottomLeft: Radius.circular(12.0),
-                ),
-                child: SizedBox(
-                  child: Image.network(
-                    ImageDownloader.imageUrl(posterPath),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 8.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8.0),
+          color: const Color(0xFFFFFFFF),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x0D000000),
+              offset: Offset(0, 0),
+              blurRadius: 5,
+              spreadRadius: 5,
             ),
-          const SizedBox(height: 6.0),
-          Text(
-            movie.title,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 14.0,
-              fontWeight: FontWeight.w500,
-            ),
-          )
-        ],
+          ],
+        ),
+        clipBehavior: Clip.hardEdge,
+        child: Row(
+          children: [
+            if (posterPath != null)
+              Image.network(
+                ImageDownloader.imageUrl(posterPath),
+                fit: BoxFit.cover,
+                width: 95,
+                height: 163,
+              ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      movie.title,
+                      style: const TextStyle(
+                        color: Color(0xFF000000),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16.0,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.fade,
+                    ),
+                    Text(
+                      movie.releaseDate,
+                      style: const TextStyle(
+                        color: Color(0xFF999999),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14.4,
+                      ),
+                      maxLines: 1,
+                    ),
+                    const SizedBox(height: 16.0),
+                    Text(
+                      movie.overview,
+                      style: const TextStyle(
+                        color: Color(0xFF000000),
+                        fontSize: 14.4,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
+    // return GestureDetector(
+    //   onTap: () => model.onMovieTap(context, index),
+    //   child: Column(
+    //     children: [
+    //       if (posterPath != null)
+    //         Container(
+    //           decoration: const BoxDecoration(
+    //             borderRadius: BorderRadius.only(
+    //               topLeft: Radius.circular(24.0),
+    //               topRight: Radius.circular(12.0),
+    //               bottomRight: Radius.circular(24.0),
+    //               bottomLeft: Radius.circular(12.0),
+    //             ),
+    //             boxShadow: [
+    //               BoxShadow(
+    //                 color: Color(0x2612153D),
+    //                 offset: Offset(0, 8),
+    //                 blurRadius: 8.0,
+    //               ),
+    //             ],
+    //           ),
+    //           child: ClipRRect(
+    //             borderRadius: const BorderRadius.only(
+    //               topLeft: Radius.circular(24.0),
+    //               topRight: Radius.circular(12.0),
+    //               bottomRight: Radius.circular(24.0),
+    //               bottomLeft: Radius.circular(12.0),
+    //             ),
+    //             child: SizedBox(
+    //               child: Image.network(
+    //                 ImageDownloader.imageUrl(posterPath),
+    //                 fit: BoxFit.cover,
+    //               ),
+    //             ),
+    //           ),
+    //         ),
+    //       const SizedBox(height: 6.0),
+    //       Text(
+    //         movie.title,
+    //         maxLines: 2,
+    //         overflow: TextOverflow.ellipsis,
+    //         textAlign: TextAlign.center,
+    //         style: const TextStyle(
+    //           fontSize: 14.0,
+    //           fontWeight: FontWeight.w500,
+    //         ),
+    //       )
+    //     ],
+    //   ),
+    // );
   }
 }

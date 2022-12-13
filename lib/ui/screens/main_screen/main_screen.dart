@@ -36,12 +36,12 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
         elevation: 0,
         showUnselectedLabels: false,
         showSelectedLabels: false,
-        unselectedIconTheme: const IconThemeData(color: Colors.purple),
+        unselectedIconTheme: const IconThemeData(color: Colors.indigo),
         selectedIconTheme:  IconThemeData(
-          color: Colors.purple,
+          color: Colors.indigo,
           shadows: [
             BoxShadow(
-              color: Colors.purple.shade300,
+              color: Colors.indigo.shade300,
               blurRadius: 32.0,
             ),
           ],

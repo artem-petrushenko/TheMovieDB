@@ -34,7 +34,6 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  google_nav_bar: ^5.0.6
   flutter_svg: ^1.1.1+1
   flutter_secure_storage: ^5.1.0
   json_annotation: ^4.6.0
@@ -43,6 +42,9 @@ dependencies:
   intl: #Формат дат
   youtube_player_flutter: ^8.1.0
   provider: ^6.0.3
+  url_launcher: ^6.1.7
+  bloc: ^8.1.0
+  flutter_bloc: ^8.1.1
 
 dev_dependencies:
   flutter_test:

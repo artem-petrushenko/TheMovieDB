@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'package:themoviedb/domain/entity/person_details.dart';
 import 'package:themoviedb/domain/services/auth_service.dart';
 import 'package:themoviedb/domain/services/person_service.dart';
@@ -59,13 +61,13 @@ class PersonDetailsActorCreditsData {
   final int id;
   final String character;
   final String name;
-  final String releaseDate;
+  final String? releaseDate;
 
   PersonDetailsActorCreditsData({
     required this.id,
     required this.character,
     required this.name,
-    required this.releaseDate,
+    this.releaseDate,
   });
 }
 
@@ -104,7 +106,6 @@ class PersonDetailsViewModel extends ChangeNotifier {
   late DateFormat _dateFormat;
   final data = PersonDetailsData();
 
-
   PersonDetailsViewModel({required this.personId});
 
   Future<void> setupLocale(BuildContext context, Locale locale) async {
@@ -128,8 +129,8 @@ class PersonDetailsViewModel extends ChangeNotifier {
       profilePath: details.profilePath,
     );
     data.personInformationData = PersonDetailsPersonalInformationData(
-      birthday: details.birthday.toString(),
-      deathday: details.deathday != null ? details.deathday.toString() : null,
+      birthday: makeDate(details.birthday),
+      deathday: makeDate(details.deathday),
       placeOfBirth: details.placeOfBirth,
       gender: makeGender(details.gender),
       knownForDepartment: details.knownForDepartment,
@@ -149,12 +150,15 @@ class PersonDetailsViewModel extends ChangeNotifier {
             id: e.id,
             name: e.title,
             character: e.character,
-            releaseDate: e.releaseDate.toString(),
+            releaseDate: e.releaseDate?.year.toString(),
           ),
         )
         .toList();
     notifyListeners();
   }
+
+  String? makeDate(DateTime? dateTime) =>
+      dateTime != null ? _dateFormat.format(dateTime).toString() : null;
 
   String makeGender(int numberGender) {
     final String gender;
@@ -196,5 +200,11 @@ class PersonDetailsViewModel extends ChangeNotifier {
     }
   }
 
-  void openLink(BuildContext context, String link) {}
+  void openLink(String link) async {
+    try {
+      await launchUrl(Uri.parse(link));
+    } catch (e) {
+      print(e);
+    }
+  }
 }
