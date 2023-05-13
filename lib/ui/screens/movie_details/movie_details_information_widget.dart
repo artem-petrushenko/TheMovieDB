@@ -8,11 +8,11 @@ class MovieDetailsInformationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
+        children: [
           _InformationWidget(),
           SizedBox(height: 16),
           _GenresWidget(),
@@ -29,18 +29,18 @@ class _InformationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
       children: [
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               _TitleWidget(),
               _BasicInformationWidget(),
             ],
           ),
         ),
-        const _FavoriteWidget()
+        _FavoriteWidget()
       ],
     );
   }
@@ -83,11 +83,11 @@ class _BasicInformationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
+          children: [
             _YearWidget(),
             SizedBox(width: 16),
             _ContentRatingWidget(),

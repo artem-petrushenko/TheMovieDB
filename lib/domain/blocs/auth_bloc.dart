@@ -5,12 +5,6 @@ import 'package:themoviedb/domain/api_client/account_api_client.dart';
 import 'package:themoviedb/domain/api_client/auth_api_client.dart';
 import 'package:themoviedb/domain/data_providers/session_data_provider.dart';
 
-enum AuthStateStatus {
-  authorized,
-  notAuthorized,
-  inProgress,
-}
-
 abstract class AuthEvent {}
 
 class AuthCheckStatusEvent extends AuthEvent {}
@@ -65,11 +59,11 @@ class AuthFailureState extends AuthState {
   int get hashCode => error.hashCode;
 }
 
-class AuthProgressState extends AuthState {
+class AuthInProgressState extends AuthState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AuthProgressState && runtimeType == other.runtimeType;
+      other is AuthInProgressState && runtimeType == other.runtimeType;
 
   @override
   int get hashCode => 0;
@@ -79,7 +73,8 @@ class AuthCheckStatusInProgressState extends AuthState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AuthCheckStatusInProgressState && runtimeType == other.runtimeType;
+      other is AuthCheckStatusInProgressState &&
+          runtimeType == other.runtimeType;
 
   @override
   int get hashCode => 0;
@@ -107,6 +102,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthCheckStatusEvent event,
     Emitter<AuthState> emit,
   ) async {
+    emit(AuthInProgressState());
     final sessionId = await _sessionDataProvider.getSessionId();
     final newState =
         sessionId != null ? AuthAuthorizedState() : AuthUnauthorizedState();
@@ -118,6 +114,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     try {
+      emit(AuthInProgressState());
       final sessionId = await _authApiClient.auth(
         username: event.login,
         password: event.password,

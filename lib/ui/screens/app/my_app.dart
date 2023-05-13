@@ -13,7 +13,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'TMDB',
       theme: ThemeData(
-        brightness: Brightness.light,
+        useMaterial3: true,
+        brightness: Brightness.dark,
         fontFamily: 'SourceSansPro',
         primarySwatch: Colors.indigo,
       ),

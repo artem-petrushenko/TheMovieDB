@@ -30,7 +30,7 @@ class PersonDetailsInformationWidget extends StatelessWidget {
         if (birthday != null)
           Column(
             children: [
-              Text('Birthday'),
+              const Text('Birthday'),
               Text(birthday),
             ],
           ),
@@ -44,19 +44,19 @@ class PersonDetailsInformationWidget extends StatelessWidget {
         if (placeOfBirth != null)
           Column(
             children: [
-              Text('Place of Birthday'),
+              const Text('Place of Birthday'),
               Text(placeOfBirth),
             ],
           ),
         Column(
           children: [
-            Text('Gender'),
+            const Text('Gender'),
             Text(gender),
           ],
         ),
         Column(
           children: [
-            Text('Known For'),
+            const Text('Known For'),
             Text(knownForDepartment),
           ],
         ),

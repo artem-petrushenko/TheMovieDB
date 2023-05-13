@@ -10,9 +10,9 @@ class MovieDetailsCastWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
+      children: [
         Padding(
           padding: EdgeInsets.only(left: 19.0, bottom: 22.0),
           child: Text(

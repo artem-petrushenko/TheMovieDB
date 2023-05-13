@@ -32,37 +32,28 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
           _screenFactory.makeUser(),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        elevation: 0,
-        showUnselectedLabels: false,
-        showSelectedLabels: false,
-        unselectedIconTheme: const IconThemeData(color: Colors.indigo),
-        selectedIconTheme:  IconThemeData(
-          color: Colors.indigo,
-          shadows: [
-            BoxShadow(
-              color: Colors.indigo.shade300,
-              blurRadius: 32.0,
-            ),
-          ],
-        ),
-        currentIndex: _selectedIndex,
-        onTap: (index) => _onItemTapped(index),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_rounded),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: (index) => _onItemTapped(index),
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.newspaper_outlined),
+            selectedIcon: Icon(Icons.newspaper),
             label: 'News',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.movie_filter_rounded),
+          NavigationDestination(
+            icon: Icon(Icons.local_movies_outlined),
+            selectedIcon: Icon(Icons.local_movies),
             label: 'Movies',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.tv_rounded),
+          NavigationDestination(
+            icon: Icon(Icons.live_tv_outlined),
+            selectedIcon: Icon(Icons.live_tv),
             label: 'Series',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+          NavigationDestination(
+            icon: Icon(Icons.person_outline),
+            selectedIcon: Icon(Icons.person),
             label: 'User',
           ),
         ],

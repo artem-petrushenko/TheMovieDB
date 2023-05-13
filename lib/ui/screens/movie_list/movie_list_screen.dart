@@ -21,18 +21,12 @@ class _MovieListWidgetState extends State<MovieListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-      ),
-      body: Padding(
-        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 8),
-        child: Stack(
-          children: const [
-            _MovieListMoviesWidget(),
-            _SearchWidget(),
-          ],
-        ),
+    return const Scaffold(
+      body: Stack(
+        children: [
+          _MovieListMoviesWidget(),
+          _SearchWidget(),
+        ],
       ),
     );
   }
@@ -44,36 +38,10 @@ class _SearchWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final model = context.read<MovieListViewModel>();
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.85),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black54,
-            offset: Offset(0, 5),
-            blurRadius: 10.0,
-          ),
-        ],
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(24.0),
-          topRight: Radius.circular(12.0),
-          bottomRight: Radius.circular(24.0),
-          bottomLeft: Radius.circular(12.0),
-        ),
-      ),
-      child: TextFormField(
-        onChanged: model.searchMovie,
-        decoration: const InputDecoration(
-          errorBorder: InputBorder.none,
-          focusedErrorBorder: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          border: InputBorder.none,
-          hintText: 'Search in the App',
-        ),
+    return TextFormField(
+      onChanged: model.searchMovie,
+      decoration: const InputDecoration(
+        hintText: 'Search in the App',
       ),
     );
   }
@@ -139,7 +107,8 @@ class _MovieListMovieWidget extends StatelessWidget {
               ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 12.0, vertical: 16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
