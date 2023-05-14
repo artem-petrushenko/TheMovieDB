@@ -70,6 +70,7 @@ class _FormWidget extends StatelessWidget {
           enableSuggestions: false,
           textCapitalization: TextCapitalization.none,
           textInputAction: TextInputAction.next,
+          obscureText: true,
           decoration: const InputDecoration(
             hintText: 'Password',
           ),

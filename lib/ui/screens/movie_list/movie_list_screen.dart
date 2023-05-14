@@ -21,8 +21,11 @@ class _MovieListWidgetState extends State<MovieListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Stack(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Movies'),
+      ),
+      body: const Stack(
         children: [
           _MovieListMoviesWidget(),
           _SearchWidget(),
@@ -81,73 +84,109 @@ class _MovieListMovieWidget extends StatelessWidget {
     final posterPath = movie.posterPath;
     return GestureDetector(
       onTap: () => model.onMovieTap(context, index),
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 8.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0),
-          color: const Color(0xFFFFFFFF),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x0D000000),
-              offset: Offset(0, 0),
-              blurRadius: 5,
-              spreadRadius: 5,
+      child: Row(
+        children: [
+          Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
             ),
-          ],
-        ),
-        clipBehavior: Clip.hardEdge,
-        child: Row(
-          children: [
-            if (posterPath != null)
-              Image.network(
-                ImageDownloader.imageUrl(posterPath),
-                fit: BoxFit.cover,
-                width: 95,
-                height: 163,
+            clipBehavior: Clip.hardEdge,
+            child: Column(
+              children: [
+                Image.network(
+                  ImageDownloader.imageUrl(posterPath ?? ''),
+                  fit: BoxFit.cover,
+                  height: 155,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8.0),
+          Expanded(
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
               ),
-            Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 12.0, vertical: 16.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       movie.title,
-                      style: const TextStyle(
-                        color: Color(0xFF000000),
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16.0,
-                      ),
+                      style: Theme.of(context).textTheme.headline6,
                       maxLines: 2,
+                      softWrap: false,
                       overflow: TextOverflow.fade,
                     ),
                     Text(
                       movie.releaseDate,
-                      style: const TextStyle(
-                        color: Color(0xFF999999),
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14.4,
-                      ),
+                      style: Theme.of(context).textTheme.subtitle1,
                       maxLines: 1,
+                      softWrap: false,
+                      overflow: TextOverflow.fade,
                     ),
-                    const SizedBox(height: 16.0),
                     Text(
                       movie.overview,
-                      style: const TextStyle(
-                        color: Color(0xFF000000),
-                        fontSize: 14.4,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: Theme.of(context).textTheme.bodySmall,
                       maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                      overflow: TextOverflow.fade,
                     ),
                   ],
                 ),
               ),
-            )
-          ],
-        ),
+            ),
+          )
+          // if (posterPath != null)
+          //   Image.network(
+          //     ImageDownloader.imageUrl(posterPath),
+          //     fit: BoxFit.cover,
+          //     width: 95,
+          //     height: 163,
+          //   ),
+          // Expanded(
+          //   child: Padding(
+          //     padding: const EdgeInsets.symmetric(
+          //         horizontal: 12.0, vertical: 16.0),
+          //     child: Column(
+          //       crossAxisAlignment: CrossAxisAlignment.start,
+          //       children: [
+          //         Text(
+          //           movie.title,
+          //           style: const TextStyle(
+          //             color: Color(0xFF000000),
+          //             fontWeight: FontWeight.w600,
+          //             fontSize: 16.0,
+          //           ),
+          //           maxLines: 2,
+          //           overflow: TextOverflow.fade,
+          //         ),
+          //         Text(
+          //           movie.releaseDate,
+          //           style: const TextStyle(
+          //             color: Color(0xFF999999),
+          //             fontWeight: FontWeight.w500,
+          //             fontSize: 14.4,
+          //           ),
+          //           maxLines: 1,
+          //         ),
+          //         const SizedBox(height: 16.0),
+          //         Text(
+          //           movie.overview,
+          //           style: const TextStyle(
+          //             color: Color(0xFF000000),
+          //             fontSize: 14.4,
+          //             fontWeight: FontWeight.w500,
+          //           ),
+          //           maxLines: 2,
+          //           overflow: TextOverflow.ellipsis,
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // )
+        ],
       ),
     );
     // return GestureDetector(

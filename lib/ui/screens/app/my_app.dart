@@ -15,7 +15,6 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         brightness: Brightness.dark,
-        fontFamily: 'SourceSansPro',
         primarySwatch: Colors.indigo,
       ),
       debugShowCheckedModeBanner: false,

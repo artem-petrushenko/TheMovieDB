@@ -5,9 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:themoviedb/ui/screens/loader/loader_view_cubit.dart';
 import 'package:themoviedb/ui/screens/loader/loader_screen.dart';
 
-import 'package:themoviedb/ui/screens/auth/auth_view_cubit.dart';
-import 'package:themoviedb/ui/screens/auth/auth_screen.dart';
-
 import 'package:themoviedb/ui/screens/movie_list/movie_list_model.dart';
 import 'package:themoviedb/ui/screens/movie_list/movie_list_screen.dart';
 import 'package:themoviedb/ui/screens/movie_trailer/movie_trailer_model.dart';
@@ -29,7 +26,11 @@ import 'package:themoviedb/ui/screens/user/user_model.dart';
 import 'package:themoviedb/ui/screens/people_details/person_details_screen.dart';
 import 'package:themoviedb/ui/screens/people_details/person_details_model.dart';
 
-import 'package:themoviedb/domain/blocs/auth_bloc.dart';
+import 'package:themoviedb/domain/blocs/auth/auth_bloc.dart';
+
+import '../../ui/screens/auth/auth_screen.dart';
+import '../../ui/screens/auth/auth_view_cubit.dart';
+
 
 class ScreenFactory {
   AuthBloc? _authBloc;
