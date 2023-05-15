@@ -4,6 +4,7 @@ class MovieListContainer {
   final List<Movie> movies;
   final int currentPage;
   final int totalPage;
+
   bool get isComplete => currentPage >= totalPage;
 
   const MovieListContainer.initial()
@@ -49,6 +50,9 @@ class MovieListState {
   final String searchQuery;
 
   bool get isSearchMode => searchQuery.isNotEmpty;
+
+  List<Movie> get movies =>
+      isSearchMode ? searchMovieContainer.movies : popularMovieContainer.movies;
 
   const MovieListState.initial()
       : popularMovieContainer = const MovieListContainer.initial(),

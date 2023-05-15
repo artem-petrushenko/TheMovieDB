@@ -81,8 +81,7 @@ class MovieListBloc extends Bloc<MovieListEvent, MovieListState> {
     if (container.isComplete) return null;
     final nextPage = container.currentPage + 1;
     final result = await loader(nextPage);
-    final movies = container.movies;
-    movies.addAll(result.movies);
+    final movies = List<Movie>.from(container.movies)..addAll(result.movies);
     final newContainer = container.copyWith(
       movies: movies,
       currentPage: result.page,

@@ -269,11 +269,4 @@ class MovieDetailsViewModel extends ChangeNotifier {
   void backToMovies(BuildContext context) {
     Navigator.pop(context);
   }
-
-  void openDetailsPerson(BuildContext context, int personId){
-    Navigator.of(context).pushNamed(
-      MainNavigationRouteNames.peopleDetailsScreen,
-      arguments: personId,
-    );
-  }
 }

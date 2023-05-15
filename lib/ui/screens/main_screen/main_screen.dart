@@ -26,9 +26,8 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
       body: IndexedStack(
         index: _selectedIndex,
         children: [
-          _screenFactory.makeNewsList(),
+          _screenFactory.makeUser(),
           _screenFactory.makeMoviesList(),
-          _screenFactory.makeTVShowsList(),
           _screenFactory.makeUser(),
         ],
       ),
@@ -45,11 +44,6 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
             icon: Icon(Icons.local_movies_outlined),
             selectedIcon: Icon(Icons.local_movies),
             label: 'Movies',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.live_tv_outlined),
-            selectedIcon: Icon(Icons.live_tv),
-            label: 'Series',
           ),
           NavigationDestination(
             icon: Icon(Icons.person_outline),
