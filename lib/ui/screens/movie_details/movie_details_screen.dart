@@ -43,10 +43,10 @@ class _BodyWidget extends StatelessWidget {
     if (isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
-    return SingleChildScrollView(
+    return const SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
+        children: [
           MovieDetailsPosterWidget(),
           SizedBox(height: 24),
           MovieDetailsInformationWidget(),

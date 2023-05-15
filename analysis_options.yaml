@@ -1,11 +1,11 @@
 include: package:flutter_lints/flutter.yaml
 
 analyzer:
-  strong-mode:
-    implicit-casts: false           # Неявные объявления
-    implicit-dynamic: false         # Неявные переменные
   exclude:
     - '**/*.g.dart'
+  language:
+    strict-casts: true
+    strict-raw-types: true
 
 linter:
   rules:

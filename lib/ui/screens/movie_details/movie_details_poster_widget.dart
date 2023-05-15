@@ -12,10 +12,10 @@ class MovieDetailsPosterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       children: [
         Stack(
-          children: const [
+          children: [
             _PosterWidget(),
             _ActionsWidget(),
             _RankingBlockWidget(),
@@ -33,13 +33,13 @@ class _ActionsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
+    return const Positioned(
       top: 40,
       left: 24,
       right: 24,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
+        children: [
           _BackWidget(),
           _WatchlistWidget(),
         ],
@@ -166,10 +166,10 @@ class _RankingBlockWidget extends StatelessWidget {
             ),
           ],
         ),
-        child: Row(
+        child: const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             _RankingWidget(),
             SizedBox(width: 32),
             _RateWidget(),
@@ -227,8 +227,8 @@ class _RateWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: const [
+    return const Column(
+      children: [
         Icon(
           Icons.star_border_rounded,
           size: 32,

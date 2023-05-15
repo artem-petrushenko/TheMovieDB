@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:themoviedb/domain/api_client/image_downloader.dart';
-import 'package:themoviedb/ui/screens/movie_list/movie_list_model.dart';
+import 'package:themoviedb/ui/navigation/main_navigation.dart';
+import 'package:themoviedb/ui/screens/movie_list/movie_list_cubit.dart';
 
 class MovieListScreen extends StatefulWidget {
   const MovieListScreen({Key? key}) : super(key: key);
@@ -16,23 +17,20 @@ class _MovieListWidgetState extends State<MovieListScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final locale = Localizations.localeOf(context);
-    context.read<MovieListViewModel>().setupLocale(locale);
+    context.read<MovieListCubit>().setupLocale(locale.languageCode);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
+        title: const Text('Movies'),
       ),
-      body: Padding(
-        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 8),
-        child: Stack(
-          children: const [
-            _MovieListMoviesWidget(),
-            _SearchWidget(),
-          ],
-        ),
+      body: const Stack(
+        children: [
+          _MovieListMoviesWidget(),
+          _SearchWidget(),
+        ],
       ),
     );
   }
@@ -43,37 +41,11 @@ class _SearchWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = context.read<MovieListViewModel>();
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.85),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black54,
-            offset: Offset(0, 5),
-            blurRadius: 10.0,
-          ),
-        ],
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(24.0),
-          topRight: Radius.circular(12.0),
-          bottomRight: Radius.circular(24.0),
-          bottomLeft: Radius.circular(12.0),
-        ),
-      ),
-      child: TextFormField(
-        onChanged: model.searchMovie,
-        decoration: const InputDecoration(
-          errorBorder: InputBorder.none,
-          focusedErrorBorder: InputBorder.none,
-          enabledBorder: InputBorder.none,
-          disabledBorder: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          border: InputBorder.none,
-          hintText: 'Search in the App',
-        ),
+    final cubit = context.read<MovieListCubit>();
+    return TextFormField(
+      onChanged: cubit.searchMovie,
+      decoration: const InputDecoration(
+        hintText: 'Search in the App',
       ),
     );
   }
@@ -84,16 +56,16 @@ class _MovieListMoviesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = context.watch<MovieListViewModel>();
+    final cubit = context.watch<MovieListCubit>();
     return ListView.builder(
       padding: const EdgeInsets.symmetric(
         horizontal: 16.0,
       ),
       itemExtent: 163,
       shrinkWrap: true,
-      itemCount: model.movies.length,
+      itemCount: cubit.state.movies.length,
       itemBuilder: (BuildContext context, int index) {
-        model.showedMovieAtIndex(index);
+        cubit.showedMovieAtIndex(index);
         return _MovieListMovieWidget(index: index);
       },
     );
@@ -108,128 +80,74 @@ class _MovieListMovieWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = context.read<MovieListViewModel>();
-    final movie = model.movies[index];
+    final cubit = context.read<MovieListCubit>();
+    final movie = cubit.state.movies[index];
     final posterPath = movie.posterPath;
     return GestureDetector(
-      onTap: () => model.onMovieTap(context, index),
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 8.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0),
-          color: const Color(0xFFFFFFFF),
-          boxShadow: const [
-            BoxShadow(
-              color: Color(0x0D000000),
-              offset: Offset(0, 0),
-              blurRadius: 5,
-              spreadRadius: 5,
+      onTap: () => _onMovieTap(context, movie.id),
+      child: Row(
+        children: [
+          Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
             ),
-          ],
-        ),
-        clipBehavior: Clip.hardEdge,
-        child: Row(
-          children: [
-            if (posterPath != null)
-              Image.network(
-                ImageDownloader.imageUrl(posterPath),
-                fit: BoxFit.cover,
-                width: 95,
-                height: 163,
+            clipBehavior: Clip.hardEdge,
+            child: Column(
+              children: [
+                Image.network(
+                  ImageDownloader.imageUrl(posterPath ?? ''),
+                  fit: BoxFit.cover,
+                  height: 155,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8.0),
+          Expanded(
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
               ),
-            Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       movie.title,
-                      style: const TextStyle(
-                        color: Color(0xFF000000),
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16.0,
-                      ),
+                      style: Theme.of(context).textTheme.headline6,
                       maxLines: 2,
+                      softWrap: false,
                       overflow: TextOverflow.fade,
                     ),
                     Text(
                       movie.releaseDate,
-                      style: const TextStyle(
-                        color: Color(0xFF999999),
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14.4,
-                      ),
+                      style: Theme.of(context).textTheme.subtitle1,
                       maxLines: 1,
+                      softWrap: false,
+                      overflow: TextOverflow.fade,
                     ),
-                    const SizedBox(height: 16.0),
                     Text(
                       movie.overview,
-                      style: const TextStyle(
-                        color: Color(0xFF000000),
-                        fontSize: 14.4,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: Theme.of(context).textTheme.bodySmall,
                       maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                      overflow: TextOverflow.fade,
                     ),
                   ],
                 ),
               ),
-            )
-          ],
-        ),
+            ),
+          ),
+        ],
       ),
     );
-    // return GestureDetector(
-    //   onTap: () => model.onMovieTap(context, index),
-    //   child: Column(
-    //     children: [
-    //       if (posterPath != null)
-    //         Container(
-    //           decoration: const BoxDecoration(
-    //             borderRadius: BorderRadius.only(
-    //               topLeft: Radius.circular(24.0),
-    //               topRight: Radius.circular(12.0),
-    //               bottomRight: Radius.circular(24.0),
-    //               bottomLeft: Radius.circular(12.0),
-    //             ),
-    //             boxShadow: [
-    //               BoxShadow(
-    //                 color: Color(0x2612153D),
-    //                 offset: Offset(0, 8),
-    //                 blurRadius: 8.0,
-    //               ),
-    //             ],
-    //           ),
-    //           child: ClipRRect(
-    //             borderRadius: const BorderRadius.only(
-    //               topLeft: Radius.circular(24.0),
-    //               topRight: Radius.circular(12.0),
-    //               bottomRight: Radius.circular(24.0),
-    //               bottomLeft: Radius.circular(12.0),
-    //             ),
-    //             child: SizedBox(
-    //               child: Image.network(
-    //                 ImageDownloader.imageUrl(posterPath),
-    //                 fit: BoxFit.cover,
-    //               ),
-    //             ),
-    //           ),
-    //         ),
-    //       const SizedBox(height: 6.0),
-    //       Text(
-    //         movie.title,
-    //         maxLines: 2,
-    //         overflow: TextOverflow.ellipsis,
-    //         textAlign: TextAlign.center,
-    //         style: const TextStyle(
-    //           fontSize: 14.0,
-    //           fontWeight: FontWeight.w500,
-    //         ),
-    //       )
-    //     ],
-    //   ),
-    // );
+  }
+
+  void _onMovieTap(BuildContext context, int movieID) {
+    Navigator.of(context).pushNamed(
+      MainNavigationRouteNames.movieDetailsScreen,
+      arguments: movieID,
+    );
   }
 }
