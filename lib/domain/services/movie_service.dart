@@ -1,23 +1,26 @@
-import 'package:themoviedb/configuration/configuration.dart';
+import 'package:themoviedb/src/common/constants/string.dart';
 
 import 'package:themoviedb/domain/entity/popular_movie_response.dart';
 
 import 'package:themoviedb/domain/api_client/movie_api_client.dart';
 import 'package:themoviedb/domain/api_client/account_api_client.dart';
-import 'package:themoviedb/domain/data_providers/session_data_provider.dart';
 import 'package:themoviedb/domain/local_entity/movie_details_local.dart';
+
+import 'package:themoviedb/src/common/data/client/secure_storage_dao.dart';
+import 'package:themoviedb/src/common/data/provider/session/session_storage_impl.dart';
 
 class MovieService {
   final _movieApiClient = MovieApiClient();
-  final _sessionDataProvider = SessionDataProvider();
+  final _sessionDataProvider =
+      SessionStorageImpl(secureStorageDao: SecureStorageDao());
   final _accountApiClient = AccountApiClient();
 
   Future<PopularMovieResponse> popularMovie(int page, String locale) async =>
-      _movieApiClient.popularMovie(page, locale, Configuration.apiKey);
+      _movieApiClient.popularMovie(page, locale, apiKey);
 
   Future<PopularMovieResponse> searchMovie(
           int page, String locale, String query) async =>
-      _movieApiClient.searchMovie(page, locale, query, Configuration.apiKey);
+      _movieApiClient.searchMovie(page, locale, query, apiKey);
 
   Future<MovieDetailsLocal> loadDetails({
     required int movieId,
@@ -28,9 +31,9 @@ class MovieService {
 
     bool isFavorite = false;
     bool isWatchlist = false;
-    Map accountState;
     if (sessionId != null) {
-      accountState = await _movieApiClient.accountState(movieId, sessionId);
+      final accountState =
+          await _movieApiClient.accountState(movieId, sessionId);
 
       isWatchlist = accountState['watchlist'] as bool;
       isFavorite = accountState['favorite'] as bool;

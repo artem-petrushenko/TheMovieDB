@@ -1,5 +1,5 @@
-import 'package:themoviedb/configuration/configuration.dart';
+import 'package:themoviedb/src/common/constants/string.dart';
 
 class ImageDownloader{
-  static String imageUrl(String path) => Configuration.imageUrl + path;
+  static String imageLink(String path) => imageUrl + path;
 }

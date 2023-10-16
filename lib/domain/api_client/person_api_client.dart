@@ -1,9 +1,10 @@
-import 'package:themoviedb/configuration/configuration.dart';
-import 'package:themoviedb/domain/api_client/network_client.dart';
+import 'package:themoviedb/src/common/constants/string.dart';
 import 'package:themoviedb/domain/entity/person_details.dart';
 
+import '../../src/common/data/client/rest_client/rest_client.dart';
+
 class PersonApiClient {
-  final _networkClient = NetworkClient();
+  final _networkClient = RestClient();
 
   Future<PersonDetails> personDetails(
     int personId,
@@ -19,7 +20,7 @@ class PersonApiClient {
       '/person/$personId',
       parser,
       <String, dynamic>{
-        'api_key': Configuration.apiKey,
+        'api_key': apiKey,
         'language': locale,
         'append_to_response': 'credits',
       },

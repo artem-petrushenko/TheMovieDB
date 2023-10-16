@@ -1,11 +1,12 @@
 import 'package:themoviedb/domain/api_client/account_api_client.dart';
 import 'package:themoviedb/domain/api_client/auth_api_client.dart';
-import 'package:themoviedb/domain/data_providers/session_data_provider.dart';
+import 'package:themoviedb/src/common/data/provider/session/session_storage_impl.dart';
+import 'package:themoviedb/src/common/data/client/secure_storage_dao.dart';
 
 class AuthService {
   final _authApiClient = AuthApiClient();
   final _accountApiClient = AccountApiClient();
-  final _sessionDataProvider = SessionDataProvider();
+  final _sessionDataProvider = SessionStorageImpl(secureStorageDao: SecureStorageDao());
 
   Future<bool> isAuth() async {
     final sessionId = await _sessionDataProvider.getSessionId();

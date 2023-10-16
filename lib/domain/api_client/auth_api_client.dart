@@ -1,8 +1,9 @@
-import 'package:themoviedb/configuration/configuration.dart';
-import 'package:themoviedb/domain/api_client/network_client.dart';
+import 'package:themoviedb/src/common/constants/string.dart';
+
+import '../../src/common/data/client/rest_client/rest_client.dart';
 
 class AuthApiClient {
-  final _networkClient = NetworkClient();
+  final _networkClient = RestClient();
 
   Future<String> auth({
     required String username,
@@ -28,7 +29,7 @@ class AuthApiClient {
     final result = _networkClient.get(
       '/authentication/token/new',
       parser,
-      <String, dynamic>{'api_key': Configuration.apiKey},
+      <String, dynamic>{'api_key': apiKey},
     );
     return result;
   }
@@ -53,7 +54,7 @@ class AuthApiClient {
       "/authentication/token/validate_with_login",
       parameters,
       parser,
-      <String, dynamic>{'api_key': Configuration.apiKey},
+      <String, dynamic>{'api_key': apiKey},
     );
     return result;
   }
@@ -74,7 +75,7 @@ class AuthApiClient {
       "/authentication/session/new",
       parameters,
       parser,
-      <String, dynamic>{'api_key': Configuration.apiKey},
+      <String, dynamic>{'api_key': apiKey},
     );
     return result;
   }

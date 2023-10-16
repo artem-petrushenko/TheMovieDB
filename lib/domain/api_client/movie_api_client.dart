@@ -1,10 +1,12 @@
-import 'package:themoviedb/domain/api_client/network_client.dart';
+
 import 'package:themoviedb/domain/entity/movie_details.dart';
 import 'package:themoviedb/domain/entity/popular_movie_response.dart';
-import 'package:themoviedb/configuration/configuration.dart';
+import 'package:themoviedb/src/common/constants/string.dart';
+
+import '../../src/common/data/client/rest_client/rest_client.dart';
 
 class MovieApiClient {
-  final _networkClient = NetworkClient();
+  final _networkClient = RestClient();
 
   Future<PopularMovieResponse> popularMovie(
       int page, String locale, String apiKey) async {
@@ -67,18 +69,18 @@ class MovieApiClient {
       parser,
       <String, dynamic>{
         'append_to_response': 'credits,videos',
-        'api_key': Configuration.apiKey,
+        'api_key': apiKey,
         'language': locale,
       },
     );
     return result;
   }
 
-  Future<Map> accountState(
+  Future<Map<String, dynamic>> accountState(
       int movieId,
       String sessionId,
       ) async {
-    Map parser(dynamic json) {
+    Map<String, dynamic> parser(dynamic json) {
       final jsonMap = json as Map<String, dynamic>;
       final result = jsonMap;
       return result;
@@ -88,7 +90,7 @@ class MovieApiClient {
       '/movie/$movieId/account_states',
       parser,
       <String, dynamic>{
-        'api_key': Configuration.apiKey,
+        'api_key': apiKey,
         'session_id': sessionId,
       },
     );

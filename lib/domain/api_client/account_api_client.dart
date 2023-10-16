@@ -1,5 +1,5 @@
-import 'package:themoviedb/configuration/configuration.dart';
-import 'package:themoviedb/domain/api_client/network_client.dart';
+import 'package:themoviedb/src/common/constants/string.dart';
+import 'package:themoviedb/src/common/data/client/rest_client/rest_client.dart';
 
 enum MediaType { movie, tv }
 
@@ -15,7 +15,7 @@ extension MediaTypeAsString on MediaType {
 }
 
 class AccountApiClient {
-  final _networkClient = NetworkClient();
+  final _networkClient = RestClient();
 
   Future<int> getAccountInfo(
     String sessionId,
@@ -30,7 +30,7 @@ class AccountApiClient {
       '/account',
       parser,
       <String, dynamic>{
-        'api_key': Configuration.apiKey,
+        'api_key': apiKey,
         'session_id': sessionId,
       },
     );
@@ -58,7 +58,7 @@ class AccountApiClient {
       parameters,
       parser,
       <String, dynamic>{
-        'api_key': Configuration.apiKey,
+        'api_key': apiKey,
         'session_id': sessionId,
       },
     );
@@ -86,7 +86,7 @@ class AccountApiClient {
       parameters,
       parser,
       <String, dynamic>{
-        'api_key': Configuration.apiKey,
+        'api_key': apiKey,
         'session_id': sessionId,
       },
     );
