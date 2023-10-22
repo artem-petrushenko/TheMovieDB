@@ -93,22 +93,11 @@ class _ActorListItemWidget extends StatelessWidget {
             actor.name,
             textAlign: TextAlign.center,
             maxLines: 2,
-            style: const TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 14,
-              color: Color(0xFF12153D),
-            ),
           ),
           const SizedBox(height: 4.0),
           Text(
             actor.character,
-            textAlign: TextAlign.center,
             maxLines: 1,
-            style: const TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 14,
-              color: Color(0xFF9A9BB2),
-            ),
           ),
         ],
       ),

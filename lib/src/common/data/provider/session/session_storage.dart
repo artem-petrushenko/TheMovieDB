@@ -1,4 +1,4 @@
-abstract class SessionStorage {
+abstract interface class SessionStorage {
   Future<String?> getSessionId();
 
   Future<void> setSessionId(String value);

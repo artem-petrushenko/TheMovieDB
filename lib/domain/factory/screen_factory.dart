@@ -4,9 +4,6 @@ import 'package:provider/provider.dart';
 
 import 'package:themoviedb/src/feature/movies/widget/movie_list_cubit.dart';
 
-import 'package:themoviedb/src/feature/movie_details/movie_details_model.dart';
-import 'package:themoviedb/src/feature/movie_details/movie_details_screen.dart';
-
 import 'package:themoviedb/src/feature/main/widget/main_screen.dart';
 
 import 'package:themoviedb/src/feature/movies/bloc/movies_bloc.dart';
@@ -16,6 +13,8 @@ import '../../src/feature/auth/auth_screen.dart';
 import '../../src/feature/auth/auth_view_cubit.dart';
 import '../../src/feature/loader/loader_screen.dart';
 import '../../src/feature/loader/loader_view_cubit.dart';
+import '../../src/feature/movie_details/bloc/movie_details_bloc.dart';
+import '../../src/feature/movie_details/widget/movie_details_view.dart';
 import '../../src/feature/movies/widget/movie_list_screen.dart';
 import '../../src/feature/profile/user_model.dart';
 import '../../src/feature/profile/user_screen.dart';
@@ -54,9 +53,10 @@ class ScreenFactory {
   }
 
   Widget makeMovieDetails(int movieId) {
-    return ChangeNotifierProvider(
-      create: (_) => MovieDetailsViewModel(movieId: movieId),
-      child: const MovieDetailsScreen(),
+    return BlocProvider(
+      create: (_) => MovieDetailsBloc()
+        ..add(MovieDetailsEvent.fetchDetails(movieId: movieId)),
+      child: MovieDetailsView(movieId: movieId),
     );
   }
 

@@ -264,8 +264,4 @@ class MovieDetailsViewModel extends ChangeNotifier {
       default:
     }
   }
-
-  void backToMovies(BuildContext context) {
-    Navigator.pop(context);
-  }
 }

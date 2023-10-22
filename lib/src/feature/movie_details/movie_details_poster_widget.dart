@@ -84,7 +84,6 @@ class _BackWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = context.read<MovieDetailsViewModel>();
     return SizedBox.fromSize(
       size: const Size(40, 40),
       child: ClipRRect(
@@ -92,7 +91,7 @@ class _BackWidget extends StatelessWidget {
         child: Material(
           color: const Color(0x4DFFFFFF),
           child: InkWell(
-            onTap: () => model.backToMovies(context),
+            onTap: () => Navigator.pop(context),
             child: const Icon(
               Icons.arrow_back_ios_new,
               size: 24,

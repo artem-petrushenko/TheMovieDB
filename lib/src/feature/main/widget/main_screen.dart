@@ -26,7 +26,6 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
       body: IndexedStack(
         index: _selectedIndex,
         children: [
-          _screenFactory.makeUser(),
           _screenFactory.makeMoviesList(),
           _screenFactory.makeUser(),
         ],
@@ -35,11 +34,6 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
         selectedIndex: _selectedIndex,
         onDestinationSelected: (index) => _onItemTapped(index),
         destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.newspaper_outlined),
-            selectedIcon: Icon(Icons.newspaper),
-            label: 'News',
-          ),
           NavigationDestination(
             icon: Icon(Icons.local_movies_outlined),
             selectedIcon: Icon(Icons.local_movies),
