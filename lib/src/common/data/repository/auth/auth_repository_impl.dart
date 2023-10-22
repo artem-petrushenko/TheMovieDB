@@ -1,18 +1,18 @@
 import 'package:themoviedb/domain/api_client/account_api_client.dart';
-import 'package:themoviedb/domain/api_client/auth_api_client.dart';
-import 'package:themoviedb/src/common/data/provider/session/session_storage.dart';
+import 'package:themoviedb/src/common/data/provider/auth/remote/auth_network_data_provider.dart';
+import 'package:themoviedb/src/common/data/provider/session/local/session_storage.dart';
 import 'package:themoviedb/src/common/data/repository/auth/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   const AuthRepositoryImpl({
     required SessionStorage sessionStorage,
-    required AuthApiClient authApiClient,
+    required AuthNetworkDataProvider authNetworkDataProvider,
     required AccountApiClient accountApiClient,
   })  : _sessionStorage = sessionStorage,
         _accountApiClient = accountApiClient,
-        _authApiClient = authApiClient;
+        _authNetworkDataProvider = authNetworkDataProvider;
 
-  final AuthApiClient _authApiClient;
+  final AuthNetworkDataProvider _authNetworkDataProvider;
   final AccountApiClient _accountApiClient;
   final SessionStorage _sessionStorage;
 
@@ -25,7 +25,8 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<void> login(String login, String password) async {
-    final sessionId = await _authApiClient.auth(
+    final sessionId =
+        await _authNetworkDataProvider.signInWithUsernameAndPassword(
       username: login,
       password: password,
     );

@@ -7,7 +7,8 @@ import 'package:themoviedb/domain/api_client/account_api_client.dart';
 import 'package:themoviedb/domain/local_entity/movie_details_local.dart';
 
 import 'package:themoviedb/src/common/data/client/secure_storage_dao.dart';
-import 'package:themoviedb/src/common/data/provider/session/session_storage_impl.dart';
+
+import '../../src/common/data/provider/session/local/session_storage_impl.dart';
 
 class MovieService {
   final _movieApiClient = MovieApiClient();

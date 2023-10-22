@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:themoviedb/domain/api_client/account_api_client.dart';
-import 'package:themoviedb/domain/api_client/auth_api_client.dart';
+import 'package:themoviedb/src/common/data/client/rest_client/rest_client.dart';
 import 'package:themoviedb/src/common/data/client/secure_storage_dao.dart';
-import 'package:themoviedb/src/common/data/provider/session/session_storage_impl.dart';
+import 'package:themoviedb/src/common/data/provider/auth/remote/auth_network_data_provider_impl.dart';
+import 'package:themoviedb/src/common/data/provider/session/local/session_storage_impl.dart';
 import 'package:themoviedb/src/common/data/repository/auth/auth_repository_impl.dart';
 
 import 'package:themoviedb/src/feature/movies/widget/movie_list_cubit.dart';
@@ -27,7 +28,17 @@ class ScreenFactory {
   AuthBloc? _authBloc;
 
   Widget makeLoader() {
-    final authBloc = _authBloc ?? AuthBloc(AuthCheckStatusInProgressState());
+    final authBloc = _authBloc ??
+        AuthBloc(
+          AuthCheckStatusInProgressState(),
+          authRepository: AuthRepositoryImpl(
+            sessionStorage:
+                SessionStorageImpl(secureStorageDao: SecureStorageDao()),
+            authNetworkDataProvider:
+                AuthNetworkDataProviderImpl(client: RestClient()),
+            accountApiClient: AccountApiClient(),
+          ),
+        );
     _authBloc = authBloc;
     return BlocProvider<LoaderViewCubit>(
       create: (_) => LoaderViewCubit(
@@ -39,7 +50,17 @@ class ScreenFactory {
   }
 
   Widget makeAuth() {
-    final authBloc = _authBloc ?? AuthBloc(AuthCheckStatusInProgressState());
+    final authBloc = _authBloc ??
+        AuthBloc(
+          AuthCheckStatusInProgressState(),
+          authRepository: AuthRepositoryImpl(
+            sessionStorage:
+                SessionStorageImpl(secureStorageDao: SecureStorageDao()),
+            authNetworkDataProvider:
+                AuthNetworkDataProviderImpl(client: RestClient()),
+            accountApiClient: AccountApiClient(),
+          ),
+        );
     _authBloc = authBloc;
     return BlocProvider<AuthViewCubit>(
       create: (_) => AuthViewCubit(
@@ -79,7 +100,8 @@ class ScreenFactory {
         authRepository: AuthRepositoryImpl(
           sessionStorage:
               SessionStorageImpl(secureStorageDao: SecureStorageDao()),
-          authApiClient: AuthApiClient(),
+          authNetworkDataProvider:
+              AuthNetworkDataProviderImpl(client: RestClient()),
           accountApiClient: AccountApiClient(),
         ),
       )..add(const ProfileEvent.fetchProfile()),

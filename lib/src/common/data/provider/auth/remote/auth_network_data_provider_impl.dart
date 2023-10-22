@@ -1,11 +1,17 @@
-import 'package:themoviedb/src/common/constants/string.dart';
+import 'package:themoviedb/src/common/data/client/rest_client/rest_client.dart';
+import 'package:themoviedb/src/common/data/provider/auth/remote/auth_network_data_provider.dart';
 
-import '../../src/common/data/client/rest_client/rest_client.dart';
+import '../../../../constants/string.dart';
 
-class AuthApiClient {
-  final _networkClient = RestClient();
+class AuthNetworkDataProviderImpl implements AuthNetworkDataProvider {
+  const AuthNetworkDataProviderImpl({
+    required RestClient client,
+  }) : _client = client;
 
-  Future<String> auth({
+  final RestClient _client;
+
+  @override
+  Future<String> signInWithUsernameAndPassword({
     required String username,
     required String password,
   }) async {
@@ -26,7 +32,7 @@ class AuthApiClient {
       return token;
     }
 
-    final result = _networkClient.get(
+    final result = _client.get(
       '/authentication/token/new',
       parser,
       <String, dynamic>{'api_key': apiKey},
@@ -50,7 +56,7 @@ class AuthApiClient {
       'password': password,
       'request_token': requestToken,
     };
-    final result = _networkClient.post(
+    final result = _client.post(
       "/authentication/token/validate_with_login",
       parameters,
       parser,
@@ -71,7 +77,7 @@ class AuthApiClient {
     final parameters = <String, dynamic>{
       'request_token': requestToken,
     };
-    final result = _networkClient.post(
+    final result = _client.post(
       "/authentication/session/new",
       parameters,
       parser,

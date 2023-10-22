@@ -1,6 +1,6 @@
 import 'package:themoviedb/src/common/data/client/secure_storage_dao.dart';
 
-import 'package:themoviedb/src/common/data/provider/session/session_storage.dart';
+import 'package:themoviedb/src/common/data/provider/session/local/session_storage.dart';
 
 abstract class _Keys {
   static const sessionId = 'session_id';
