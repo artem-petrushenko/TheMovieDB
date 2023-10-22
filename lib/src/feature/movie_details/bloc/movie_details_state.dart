@@ -8,6 +8,7 @@ class MovieDetailsState with _$MovieDetailsState {
     required final MovieDetailsLocal details,
   }) = _Success;
 
-  const factory MovieDetailsState.failure({required final Object error}) =
-      _Failure;
+  const factory MovieDetailsState.failure({
+    required final Object error,
+  }) = _Failure;
 }

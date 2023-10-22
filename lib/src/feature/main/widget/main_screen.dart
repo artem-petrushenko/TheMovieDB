@@ -27,7 +27,7 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
         index: _selectedIndex,
         children: [
           _screenFactory.makeMoviesList(),
-          _screenFactory.makeUser(),
+          _screenFactory.makeProfile(),
         ],
       ),
       bottomNavigationBar: NavigationBar(

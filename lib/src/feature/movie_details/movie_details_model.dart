@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 
 import 'package:themoviedb/domain/api_client/api_client_exception.dart';
 import 'package:themoviedb/domain/entity/movie_details.dart';
-import 'package:themoviedb/domain/services/auth_service.dart';
 import 'package:themoviedb/domain/services/movie_service.dart';
 import 'package:themoviedb/src/common/widget/navigation/navigation.dart';
 import 'package:themoviedb/library/localized_model.dart';
@@ -131,7 +130,6 @@ class MovieDetailsData {
 }
 
 class MovieDetailsViewModel extends ChangeNotifier {
-  final _authService = AuthService();
   final _movieService = MovieService();
 
   final int movieId;
@@ -258,7 +256,6 @@ class MovieDetailsViewModel extends ChangeNotifier {
       ApiClientException exception, BuildContext context) {
     switch (exception.type) {
       case ApiClientExceptionType.sessionExpired:
-        _authService.logout();
         Navigation.resetNavigation(context);
         break;
       default:

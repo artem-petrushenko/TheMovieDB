@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
+import 'package:themoviedb/domain/api_client/account_api_client.dart';
+import 'package:themoviedb/domain/api_client/auth_api_client.dart';
+import 'package:themoviedb/src/common/data/client/secure_storage_dao.dart';
+import 'package:themoviedb/src/common/data/provider/session/session_storage_impl.dart';
+import 'package:themoviedb/src/common/data/repository/auth/auth_repository_impl.dart';
 
 import 'package:themoviedb/src/feature/movies/widget/movie_list_cubit.dart';
 
 import 'package:themoviedb/src/feature/main/widget/main_screen.dart';
 
 import 'package:themoviedb/src/feature/movies/bloc/movies_bloc.dart';
+import 'package:themoviedb/src/feature/profile/bloc/profile_bloc.dart';
+import 'package:themoviedb/src/feature/profile/widget/profile_view.dart';
 
 import '../../src/feature/auth/auth/auth_bloc.dart';
 import '../../src/feature/auth/auth_screen.dart';
@@ -16,8 +22,6 @@ import '../../src/feature/loader/loader_view_cubit.dart';
 import '../../src/feature/movie_details/bloc/movie_details_bloc.dart';
 import '../../src/feature/movie_details/widget/movie_details_view.dart';
 import '../../src/feature/movies/widget/movie_list_screen.dart';
-import '../../src/feature/profile/user_model.dart';
-import '../../src/feature/profile/user_screen.dart';
 
 class ScreenFactory {
   AuthBloc? _authBloc;
@@ -69,10 +73,17 @@ class ScreenFactory {
     );
   }
 
-  Widget makeUser() {
-    return ChangeNotifierProvider(
-      create: (_) => UserViewModel(),
-      child: const UserScreen(),
+  Widget makeProfile() {
+    return BlocProvider(
+      create: (BuildContext context) => ProfileBloc(
+        authRepository: AuthRepositoryImpl(
+          sessionStorage:
+              SessionStorageImpl(secureStorageDao: SecureStorageDao()),
+          authApiClient: AuthApiClient(),
+          accountApiClient: AccountApiClient(),
+        ),
+      )..add(const ProfileEvent.fetchProfile()),
+      child: const ProfileView(),
     );
   }
 }
