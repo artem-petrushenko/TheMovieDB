@@ -65,6 +65,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     try {
       await _authRepository.logout();
+      emit(AuthUnauthorizedState());
     } catch (e) {
       emit(AuthFailureState(e));
     }

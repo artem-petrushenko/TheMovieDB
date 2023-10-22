@@ -1,13 +1,18 @@
+import 'package:themoviedb/src/common/data/client/rest_client/rest_client.dart';
+import 'package:themoviedb/src/common/data/provider/movie/remote/movie_network_data_provider.dart';
 
-import 'package:themoviedb/domain/entity/movie_details.dart';
-import 'package:themoviedb/domain/entity/popular_movie_response.dart';
-import 'package:themoviedb/src/common/constants/string.dart';
+import '../../../../../../domain/entity/movie_details.dart';
+import '../../../../../../domain/entity/popular_movie_response.dart';
+import '../../../../constants/string.dart';
 
-import '../../src/common/data/client/rest_client/rest_client.dart';
+class MovieNetworkDataProviderImpl implements MovieNetworkDataProvider {
+  const MovieNetworkDataProviderImpl({
+    required RestClient client,
+  }) : _client = client;
 
-class MovieApiClient {
-  final _networkClient = RestClient();
+  final RestClient _client;
 
+  @override
   Future<PopularMovieResponse> popularMovie(
       int page, String locale, String apiKey) async {
     PopularMovieResponse parser(dynamic json) {
@@ -16,7 +21,7 @@ class MovieApiClient {
       return response;
     }
 
-    final result = _networkClient.get(
+    final result = _client.get(
       '/movie/popular',
       parser,
       <String, dynamic>{
@@ -28,6 +33,7 @@ class MovieApiClient {
     return result;
   }
 
+  @override
   Future<PopularMovieResponse> searchMovie(
     int page,
     String locale,
@@ -40,7 +46,7 @@ class MovieApiClient {
       return response;
     }
 
-    final result = _networkClient.get(
+    final result = _client.get(
       '/search/movie',
       parser,
       <String, dynamic>{
@@ -54,6 +60,7 @@ class MovieApiClient {
     return result;
   }
 
+  @override
   Future<MovieDetails> movieDetails(
     int movieId,
     String locale,
@@ -64,7 +71,7 @@ class MovieApiClient {
       return response;
     }
 
-    final result = _networkClient.get(
+    final result = _client.get(
       '/movie/$movieId',
       parser,
       <String, dynamic>{
@@ -76,17 +83,18 @@ class MovieApiClient {
     return result;
   }
 
+  @override
   Future<Map<String, dynamic>> accountState(
-      int movieId,
-      String sessionId,
-      ) async {
+    int movieId,
+    String sessionId,
+  ) async {
     Map<String, dynamic> parser(dynamic json) {
       final jsonMap = json as Map<String, dynamic>;
       final result = jsonMap;
       return result;
     }
 
-    final result = _networkClient.get(
+    final result = _client.get(
       '/movie/$movieId/account_states',
       parser,
       <String, dynamic>{
@@ -97,4 +105,3 @@ class MovieApiClient {
     return result;
   }
 }
-

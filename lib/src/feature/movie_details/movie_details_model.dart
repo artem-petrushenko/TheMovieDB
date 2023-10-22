@@ -3,7 +3,13 @@ import 'package:intl/intl.dart';
 
 import 'package:themoviedb/domain/api_client/api_client_exception.dart';
 import 'package:themoviedb/domain/entity/movie_details.dart';
-import 'package:themoviedb/domain/services/movie_service.dart';
+import 'package:themoviedb/src/common/data/client/rest_client/rest_client.dart';
+import 'package:themoviedb/src/common/data/client/secure_storage_dao.dart';
+import 'package:themoviedb/src/common/data/provider/account/remove/account_network_data_provider_impl.dart';
+import 'package:themoviedb/src/common/data/provider/movie/remote/movie_network_data_provider_impl.dart';
+import 'package:themoviedb/src/common/data/provider/session/local/session_storage_impl.dart';
+import 'package:themoviedb/src/common/data/repository/movie/movie_repository_impl.dart';
+
 import 'package:themoviedb/src/common/widget/navigation/navigation.dart';
 import 'package:themoviedb/library/localized_model.dart';
 
@@ -130,7 +136,17 @@ class MovieDetailsData {
 }
 
 class MovieDetailsViewModel extends ChangeNotifier {
-  final _movieService = MovieService();
+  final _movieService = MovieRepositoryImpl(
+    movieNetworkDataProvider: MovieNetworkDataProviderImpl(
+      client: RestClient(),
+    ),
+    sessionStorage: SessionStorageImpl(
+      secureStorageDao: SecureStorageDao(),
+    ),
+    accountNetworkDataProvider: AccountNetworkDataProviderImpl(
+      client: RestClient(),
+    ),
+  );
 
   final int movieId;
   final data = MovieDetailsData();

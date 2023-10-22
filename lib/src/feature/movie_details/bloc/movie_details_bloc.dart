@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:themoviedb/src/common/data/repository/movie/movie_repository.dart';
 
 import '../../../../domain/local_entity/movie_details_local.dart';
-import '../../../../domain/services/movie_service.dart';
 import '../../../../library/localized_model.dart';
 
 part 'movie_details_event.dart';
@@ -12,11 +12,14 @@ part 'movie_details_state.dart';
 part 'movie_details_bloc.freezed.dart';
 
 class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
-  final _movieService = MovieService();
-
   final _localizedStorage = LocalizedModelStorage();
 
-  MovieDetailsBloc() : super(const MovieDetailsState.loading()) {
+  final MovieRepository _movieRepository;
+
+  MovieDetailsBloc({
+    required MovieRepository movieRepository,
+  })  : _movieRepository = movieRepository,
+        super(const MovieDetailsState.loading()) {
     on<MovieDetailsEvent>(
       (event, emit) => event.map<Future<void>>(
         fetchDetails: (event) => _onFetchDetails(event, emit),
@@ -31,7 +34,7 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
     Emitter<MovieDetailsState> emit,
   ) async {
     try {
-      final details = await _movieService.loadDetails(
+      final details = await _movieRepository.loadDetails(
         movieId: event.movieId,
         locale: _localizedStorage.localeTag,
       );
@@ -48,7 +51,7 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
     try {
       final currentState = state as _Success;
 
-      _movieService.updateFavorite(
+      _movieRepository.updateFavorite(
         movieId: event.movieId,
         isFavorite: event.isFavorite,
       );
@@ -70,14 +73,15 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
     try {
       final currentState = state as _Success;
 
-      _movieService.updateFavorite(
+      _movieRepository.updateFavorite(
         movieId: event.movieId,
         isFavorite: event.isWatchlist,
       );
 
       emit(
         currentState.copyWith(
-          details: currentState.details.copyWith(isWatchlist: event.isWatchlist),
+          details:
+              currentState.details.copyWith(isWatchlist: event.isWatchlist),
         ),
       );
     } on Object catch (error) {

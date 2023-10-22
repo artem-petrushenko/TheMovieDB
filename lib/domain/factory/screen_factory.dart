@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:themoviedb/domain/api_client/account_api_client.dart';
+
 import 'package:themoviedb/src/common/data/client/rest_client/rest_client.dart';
 import 'package:themoviedb/src/common/data/client/secure_storage_dao.dart';
+import 'package:themoviedb/src/common/data/provider/account/remove/account_network_data_provider_impl.dart';
 import 'package:themoviedb/src/common/data/provider/auth/remote/auth_network_data_provider_impl.dart';
+import 'package:themoviedb/src/common/data/provider/movie/remote/movie_network_data_provider_impl.dart';
 import 'package:themoviedb/src/common/data/provider/session/local/session_storage_impl.dart';
 import 'package:themoviedb/src/common/data/repository/auth/auth_repository_impl.dart';
+import 'package:themoviedb/src/common/data/repository/movie/movie_repository_impl.dart';
 
 import 'package:themoviedb/src/feature/movies/widget/movie_list_cubit.dart';
 
@@ -32,11 +35,15 @@ class ScreenFactory {
         AuthBloc(
           AuthCheckStatusInProgressState(),
           authRepository: AuthRepositoryImpl(
-            sessionStorage:
-                SessionStorageImpl(secureStorageDao: SecureStorageDao()),
-            authNetworkDataProvider:
-                AuthNetworkDataProviderImpl(client: RestClient()),
-            accountApiClient: AccountApiClient(),
+            sessionStorage: SessionStorageImpl(
+              secureStorageDao: SecureStorageDao(),
+            ),
+            authNetworkDataProvider: AuthNetworkDataProviderImpl(
+              client: RestClient(),
+            ),
+            accountNetworkDataProvider: AccountNetworkDataProviderImpl(
+              client: RestClient(),
+            ),
           ),
         );
     _authBloc = authBloc;
@@ -54,11 +61,15 @@ class ScreenFactory {
         AuthBloc(
           AuthCheckStatusInProgressState(),
           authRepository: AuthRepositoryImpl(
-            sessionStorage:
-                SessionStorageImpl(secureStorageDao: SecureStorageDao()),
-            authNetworkDataProvider:
-                AuthNetworkDataProviderImpl(client: RestClient()),
-            accountApiClient: AccountApiClient(),
+            sessionStorage: SessionStorageImpl(
+              secureStorageDao: SecureStorageDao(),
+            ),
+            authNetworkDataProvider: AuthNetworkDataProviderImpl(
+              client: RestClient(),
+            ),
+            accountNetworkDataProvider: AccountNetworkDataProviderImpl(
+              client: RestClient(),
+            ),
           ),
         );
     _authBloc = authBloc;
@@ -79,8 +90,19 @@ class ScreenFactory {
 
   Widget makeMovieDetails(int movieId) {
     return BlocProvider(
-      create: (_) => MovieDetailsBloc()
-        ..add(MovieDetailsEvent.fetchDetails(movieId: movieId)),
+      create: (_) => MovieDetailsBloc(
+        movieRepository: MovieRepositoryImpl(
+          movieNetworkDataProvider: MovieNetworkDataProviderImpl(
+            client: RestClient(),
+          ),
+          sessionStorage: SessionStorageImpl(
+            secureStorageDao: SecureStorageDao(),
+          ),
+          accountNetworkDataProvider: AccountNetworkDataProviderImpl(
+            client: RestClient(),
+          ),
+        ),
+      )..add(MovieDetailsEvent.fetchDetails(movieId: movieId)),
       child: MovieDetailsView(movieId: movieId),
     );
   }
@@ -88,7 +110,19 @@ class ScreenFactory {
   Widget makeMoviesList() {
     return BlocProvider(
       create: (_) => MovieListCubit(
-        movieListBloc: MoviesBloc(),
+        movieListBloc: MoviesBloc(
+          movieRepository: MovieRepositoryImpl(
+            movieNetworkDataProvider: MovieNetworkDataProviderImpl(
+              client: RestClient(),
+            ),
+            sessionStorage: SessionStorageImpl(
+              secureStorageDao: SecureStorageDao(),
+            ),
+            accountNetworkDataProvider: AccountNetworkDataProviderImpl(
+              client: RestClient(),
+            ),
+          ),
+        ),
       ),
       child: const MovieListScreen(),
     );
@@ -98,11 +132,15 @@ class ScreenFactory {
     return BlocProvider(
       create: (BuildContext context) => ProfileBloc(
         authRepository: AuthRepositoryImpl(
-          sessionStorage:
-              SessionStorageImpl(secureStorageDao: SecureStorageDao()),
-          authNetworkDataProvider:
-              AuthNetworkDataProviderImpl(client: RestClient()),
-          accountApiClient: AccountApiClient(),
+          sessionStorage: SessionStorageImpl(
+            secureStorageDao: SecureStorageDao(),
+          ),
+          authNetworkDataProvider: AuthNetworkDataProviderImpl(
+            client: RestClient(),
+          ),
+          accountNetworkDataProvider: AccountNetworkDataProviderImpl(
+            client: RestClient(),
+          ),
         ),
       )..add(const ProfileEvent.fetchProfile()),
       child: const ProfileView(),

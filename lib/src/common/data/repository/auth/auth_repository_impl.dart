@@ -1,19 +1,20 @@
-import 'package:themoviedb/domain/api_client/account_api_client.dart';
+import 'package:themoviedb/src/common/data/repository/auth/auth_repository.dart';
+
+import 'package:themoviedb/src/common/data/provider/account/remove/account_network_data_provider.dart';
 import 'package:themoviedb/src/common/data/provider/auth/remote/auth_network_data_provider.dart';
 import 'package:themoviedb/src/common/data/provider/session/local/session_storage.dart';
-import 'package:themoviedb/src/common/data/repository/auth/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   const AuthRepositoryImpl({
     required SessionStorage sessionStorage,
     required AuthNetworkDataProvider authNetworkDataProvider,
-    required AccountApiClient accountApiClient,
+    required AccountNetworkDataProvider accountNetworkDataProvider,
   })  : _sessionStorage = sessionStorage,
-        _accountApiClient = accountApiClient,
+        _accountNetworkDataProvider = accountNetworkDataProvider,
         _authNetworkDataProvider = authNetworkDataProvider;
 
   final AuthNetworkDataProvider _authNetworkDataProvider;
-  final AccountApiClient _accountApiClient;
+  final AccountNetworkDataProvider _accountNetworkDataProvider;
   final SessionStorage _sessionStorage;
 
   @override
@@ -30,7 +31,8 @@ class AuthRepositoryImpl implements AuthRepository {
       username: login,
       password: password,
     );
-    final accountId = await _accountApiClient.getAccountInfo(sessionId);
+    final accountId =
+        await _accountNetworkDataProvider.getAccountInfo(sessionId);
 
     await _sessionStorage.setSessionId(sessionId);
     await _sessionStorage.setAccountId(accountId);

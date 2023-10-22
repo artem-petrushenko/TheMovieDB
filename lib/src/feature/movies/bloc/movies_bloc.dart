@@ -1,23 +1,24 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:flutter/material.dart';
-import 'package:themoviedb/src/common/constants/string.dart';
-
-import 'package:themoviedb/domain/api_client/movie_api_client.dart';
 
 import 'package:themoviedb/domain/entity/movie.dart';
 import 'package:themoviedb/domain/entity/popular_movie_response.dart';
+import 'package:themoviedb/src/common/data/repository/movie/movie_repository.dart';
 
 part 'movies_event.dart';
 
 part 'movies_state.dart';
 
 class MoviesBloc extends Bloc<MovieListEvent, MovieListState> {
-  final _movieApiClient = MovieApiClient();
+  final MovieRepository _movieRepository;
 
-  MoviesBloc() : super(const MovieListState.initial()) {
+  MoviesBloc({
+    required MovieRepository movieRepository,
+  })  : _movieRepository = movieRepository,
+        super(const MovieListState.initial()) {
     on<MovieListEvent>(
       (event, emit) async {
         switch (event) {
@@ -41,11 +42,10 @@ class MoviesBloc extends Bloc<MovieListEvent, MovieListState> {
       final container = await _loadNextPage(
         state.searchMovieContainer,
         (nextPage) async {
-          final result = _movieApiClient.searchMovie(
+          final result = _movieRepository.searchMovie(
             nextPage,
             event.locale,
             state.searchQuery,
-            apiKey,
           );
           return result;
         },
@@ -58,10 +58,9 @@ class MoviesBloc extends Bloc<MovieListEvent, MovieListState> {
       final container = await _loadNextPage(
         state.popularMovieContainer,
         (nextPage) async {
-          final result = _movieApiClient.popularMovie(
+          final result = _movieRepository.popularMovie(
             nextPage,
             event.locale,
-            apiKey,
           );
           return result;
         },

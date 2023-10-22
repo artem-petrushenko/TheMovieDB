@@ -19,7 +19,6 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl:
-  youtube_player_flutter: ^8.1.0
   provider: ^6.0.3
   url_launcher: ^6.1.7
   bloc: ^8.1.0

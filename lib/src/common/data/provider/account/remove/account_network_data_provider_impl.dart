@@ -1,22 +1,17 @@
-import 'package:themoviedb/src/common/constants/string.dart';
 import 'package:themoviedb/src/common/data/client/rest_client/rest_client.dart';
+import 'package:themoviedb/src/common/data/provider/account/remove/account_network_data_provider.dart';
+import 'package:themoviedb/src/common/utils/extension/media_type_as_string.dart';
 
-enum MediaType { movie, tv }
+import '../../../../constants/string.dart';
 
-extension MediaTypeAsString on MediaType {
-  String asString() {
-    switch (this) {
-      case MediaType.movie:
-        return 'movie';
-      case MediaType.tv:
-        return 'tv';
-    }
-  }
-}
+class AccountNetworkDataProviderImpl implements AccountNetworkDataProvider {
+  const AccountNetworkDataProviderImpl({
+    required RestClient client,
+  }) : _client = client;
 
-class AccountApiClient {
-  final _networkClient = RestClient();
+  final RestClient _client;
 
+  @override
   Future<int> getAccountInfo(
     String sessionId,
   ) async {
@@ -26,7 +21,7 @@ class AccountApiClient {
       return result;
     }
 
-    final result = _networkClient.get(
+    final result = _client.get(
       '/account',
       parser,
       <String, dynamic>{
@@ -37,6 +32,7 @@ class AccountApiClient {
     return result;
   }
 
+  @override
   Future<int> markAsFavorite({
     required int accountId,
     required String sessionId,
@@ -53,7 +49,7 @@ class AccountApiClient {
       'media_id': mediaId,
       'favorite': isFavorite,
     };
-    final result = _networkClient.post(
+    final result = _client.post(
       "/account/$accountId/favorite",
       parameters,
       parser,
@@ -65,6 +61,7 @@ class AccountApiClient {
     return result;
   }
 
+  @override
   Future<int> markAsWatchlist({
     required int accountId,
     required String sessionId,
@@ -81,7 +78,7 @@ class AccountApiClient {
       'media_id': mediaId,
       'watchlist': isWatchlist,
     };
-    final result = _networkClient.post(
+    final result = _client.post(
       "/account/$accountId/watchlist",
       parameters,
       parser,
