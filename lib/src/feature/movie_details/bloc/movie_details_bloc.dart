@@ -50,12 +50,10 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
   ) async {
     try {
       final currentState = state as _Success;
-
       _movieRepository.updateFavorite(
         movieId: event.movieId,
         isFavorite: event.isFavorite,
       );
-
       emit(
         currentState.copyWith(
           details: currentState.details.copyWith(isFavorite: event.isFavorite),
@@ -72,12 +70,10 @@ class MovieDetailsBloc extends Bloc<MovieDetailsEvent, MovieDetailsState> {
   ) async {
     try {
       final currentState = state as _Success;
-
-      _movieRepository.updateFavorite(
+      _movieRepository.updateWatchlist(
         movieId: event.movieId,
-        isFavorite: event.isWatchlist,
+        isWatchlist: event.isWatchlist,
       );
-
       emit(
         currentState.copyWith(
           details:
