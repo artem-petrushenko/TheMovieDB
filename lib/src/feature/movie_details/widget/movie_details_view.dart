@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:themoviedb/src/feature/movie_details/scope/movie_details_scope.dart';
 
 import '../../../../domain/api_client/image_downloader.dart';
 import '../bloc/movie_details_bloc.dart';
@@ -71,24 +72,59 @@ class MovieDetailsView extends StatelessWidget {
                       alignment: Alignment.bottomLeft,
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: Text(state.details.details.title),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(state.details.details.title),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text(
+                                  state.details.details.voteAverage.toString(),
+                                ),
+                                // Text(state.details.details.tagline ?? ''),
+                                if (state.details.details.releaseDate != null)
+                                  Text(
+                                    state.details.details.releaseDate!.year
+                                        .toString(),
+                                  ),
+                                if (state.details.details.runtime != null)
+                                  Text(
+                                    durationToString(
+                                        state.details.details.runtime!),
+                                  ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     )
                   ],
                 ),
               ),
+              if (state.details.details.overview != null)
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                  ),
+                  sliver: SliverToBoxAdapter(
+                    child: Text(
+                      state.details.details.overview ?? '',
+                    ),
+                  ),
+                ),
               SliverToBoxAdapter(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     IconButton.outlined(
                       onPressed: () {
-                        context.read<MovieDetailsBloc>().add(
-                              MovieDetailsEvent.changeFavorite(
-                                movieId: _movieId,
-                                isFavorite: !state.details.isFavorite,
-                              ),
-                            );
+                        MovieDetailsScope.changeFavorite(
+                          context,
+                          _movieId,
+                          !state.details.isFavorite,
+                        );
                       },
                       icon: Icon(
                         state.details.isFavorite
@@ -98,12 +134,11 @@ class MovieDetailsView extends StatelessWidget {
                     ),
                     IconButton.outlined(
                       onPressed: () {
-                        context.read<MovieDetailsBloc>().add(
-                              MovieDetailsEvent.changeWatchlist(
-                                movieId: _movieId,
-                                isWatchlist: !state.details.isWatchlist,
-                              ),
-                            );
+                        MovieDetailsScope.changeWatchlist(
+                          context,
+                          _movieId,
+                          !state.details.isWatchlist,
+                        );
                       },
                       icon: Icon(
                         state.details.isWatchlist
@@ -114,11 +149,14 @@ class MovieDetailsView extends StatelessWidget {
                   ],
                 ),
               ),
+              const SliverToBoxAdapter(child: Divider()),
               SliverList.builder(
                 itemBuilder: (BuildContext context, int index) {
-                  return  Text('$index');
+                  return Text(state.details.details.credits.cast[index].name);
                 },
-                itemCount: 10,
+                itemCount: state.details.details.credits.cast.length > 10
+                    ? 10
+                    : state.details.details.credits.cast.length,
               ),
             ],
           ),
@@ -126,5 +164,11 @@ class MovieDetailsView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String durationToString(int minutes) {
+    var d = Duration(minutes: minutes);
+    List<String> parts = d.toString().split(':');
+    return '${parts[0].padLeft(2, '0')}:${parts[1].padLeft(2, '0')}';
   }
 }
