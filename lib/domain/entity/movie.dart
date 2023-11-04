@@ -22,7 +22,7 @@ class Movie {
   final bool video;
   final double voteAverage;
 
-  Movie({
+  const Movie({
     required this.posterPath,
     required this.adult,
     required this.overview,

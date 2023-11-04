@@ -18,14 +18,15 @@ import 'package:themoviedb/src/feature/movies/bloc/movies_bloc.dart';
 import 'package:themoviedb/src/feature/profile/bloc/profile_bloc.dart';
 import 'package:themoviedb/src/feature/profile/widget/profile_view.dart';
 
-import '../../src/feature/auth/auth/auth_bloc.dart';
-import '../../src/feature/auth/auth_screen.dart';
-import '../../src/feature/auth/auth_view_cubit.dart';
-import '../../src/feature/loader/loader_screen.dart';
-import '../../src/feature/loader/loader_view_cubit.dart';
-import '../../src/feature/movie_details/bloc/movie_details_bloc.dart';
-import '../../src/feature/movie_details/widget/movie_details_view.dart';
-import '../../src/feature/movies/widget/movie_list_screen.dart';
+import 'package:themoviedb/src/feature/auth/auth/auth_bloc.dart';
+import 'package:themoviedb/src/feature/auth/auth_view.dart';
+import 'package:themoviedb/src/feature/loader/loader_screen.dart';
+import 'package:themoviedb/src/feature/loader/loader_view_cubit.dart';
+import 'package:themoviedb/src/feature/movie_details/bloc/movie_details_bloc.dart';
+import 'package:themoviedb/src/feature/movie_details/widget/movie_details_view.dart';
+import 'package:themoviedb/src/feature/movies/widget/movie_list_screen.dart';
+
+import 'package:themoviedb/src/feature/auth/auth_view_cubit/auth_view_cubit.dart';
 
 class ScreenFactory {
   AuthBloc? _authBloc;
@@ -75,10 +76,10 @@ class ScreenFactory {
     _authBloc = authBloc;
     return BlocProvider<AuthViewCubit>(
       create: (_) => AuthViewCubit(
-        AuthViewCubitFormFillInProgressState(),
+        const AuthViewState.formFillInProgress(),
         authBloc,
       ),
-      child: const AuthScreen(),
+      child: const AuthView(),
     );
   }
 
